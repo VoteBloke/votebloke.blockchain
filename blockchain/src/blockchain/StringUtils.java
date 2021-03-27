@@ -2,6 +2,8 @@ package blockchain;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 class StringUtils {
     /** Converts a string to a hex representation of its bytes.
@@ -25,5 +27,13 @@ class StringUtils {
         catch(Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String keyToString(PublicKey sender) {
+        return new String();
+    }
+
+    public static byte[] signWithEcdsa(PrivateKey privateKey, String data) {
+        return new byte[] {};
     }
 }
