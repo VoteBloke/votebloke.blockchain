@@ -9,9 +9,10 @@ import java.util.Date;
  */
 public class Block {
     /** Constructor for the Block class.
-     * @param previousHash Hash of the previous Block.
-     * @param blockVersion Version of this Block.
-     * @param miningDifficulty Mining difficulty of this Block.
+     *
+     * @param previousHash the hash of the previous Block
+     * @param blockVersion the version of this Block
+     * @param miningDifficulty the mining difficulty of this Block
      */
     public Block(String previousHash, String blockVersion, int miningDifficulty) {
         this.previousHash = previousHash;
@@ -21,19 +22,19 @@ public class Block {
         id = this.calculateId();
     }
 
-    String id;
-    String hash = "";
-    String previousHash;
-    ArrayList<Transaction> transactions = new ArrayList<>();
-    Date timeStamp = new Date(System.currentTimeMillis());
-    int nonce = 0;
-    String merkleRoot;
-    String blockVersion;
-    int miningDifficulty;
+    private String id;
+    private String hash = "";
+    private String previousHash;
+    private ArrayList<Transaction> transactions = new ArrayList<>();
+    private Date timeStamp = new Date(System.currentTimeMillis());
+    private int nonce = 0;
+    private String merkleRoot;
+    private String blockVersion;
+    private int miningDifficulty;
 
     /** toString override.
      *
-     * @return A text representation of this Block.
+     * @return the text representation of this Block.
      */
     @Override
     public String toString() {
@@ -48,7 +49,7 @@ public class Block {
 
     /** timeStamp getter.
      *
-     * @return A Date object with the date of creation of this Block.
+     * @return a Date object with the date of creation of this Block.
      */
     public Date getTimeStamp() {
         return this.timeStamp;
@@ -56,14 +57,15 @@ public class Block {
 
     /** ID getter.
      * ID of a Block is calculated based on the time stamp, previous hash and block version.
-     * @return This Block's ID.
+     *
+     * @return this Block's ID
      */
     public String getId() {
         return this.id;
     }
 
     /** Hash getter.
-     * @return This Block's hash.
+     * @return this Block's hash
     */
     public String getHash() {
         return this.hash;
@@ -71,7 +73,7 @@ public class Block {
 
     /** Adds a Transaction to this Block.
      *
-     * @param transaction Transaction to be added.
+     * @param transaction the transaction to be added
      */
     public void addTransaction(Transaction transaction) {
         if(validateTransaction(transaction)) this.transactions.add(transaction);
@@ -87,7 +89,8 @@ public class Block {
 
     /** Calculates this \code{Block}'s id.
      * Returns a 64-digit long representation of this Block.
-     * @return This Block's id.
+     *
+     * @return this Block's id
      */
     private String calculateId() {
         return StringUtils.stringToHex(this.getHeader());
@@ -97,16 +100,35 @@ public class Block {
      *
      */
     public void mineHash() {
-        String hashBase = this.getHeader() + this.transactions.toString();
-        String targetPrefix = new String(new char[this.miningDifficulty]).replace("\0", " ");
-        while (this.hash.equals("")) {
+        String hashBase = getHeader() + transactions.toString();
+        String targetPrefix = new String(new char[miningDifficulty]).replace("\0", " ");
+        while (hash.equals("")) {
             if(targetPrefix.equals(StringUtils.stringToHex(hashBase + nonce).substring(0,
-                    this.miningDifficulty))) {
-                this.hash = StringUtils.stringToHex(hashBase + nonce);
+                    miningDifficulty))) {
+                hash = StringUtils.stringToHex(hashBase + nonce);
             } else {
                 nonce += 1;
             }
         }
+    }
+
+    /** Validates this Block.
+     *
+     * @return true if this Block is valid; false otherwise
+     */
+    public boolean isBlockValid() {
+        try {
+            for (Transaction t : transactions) {
+                if (!validateTransaction(t)) return false;
+            }
+
+            if(!StringUtils.stringToHex(getHeader() +
+                    transactions.toString() + nonce).equals(getHash())) return false;
+        } catch(Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }
 

@@ -22,9 +22,22 @@ class BlockTest {
     }
 
     @Test
-    void mineHash() {
+    void mineHash_IsOfLength64() {
         Assertions.assertEquals("", block.getHash());
         block.mineHash();
         Assertions.assertEquals(64, block.getHash().length());
+    }
+
+    @Test
+    void isBlockValid_NoHashNotValid() {
+        // Block with no hash is not valid
+        Assertions.assertFalse(block.isBlockValid());
+    }
+
+    @Test
+    void isBlockValid_MinedIsValid() {
+        // Mined block is valid
+        block.mineHash();
+        Assertions.assertTrue(block.isBlockValid());
     }
 }
