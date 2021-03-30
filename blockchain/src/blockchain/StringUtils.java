@@ -1,9 +1,8 @@
 package blockchain;
 
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
+import java.util.Base64;
 
 class StringUtils {
     /** Converts a string to a hex representation of its bytes.
@@ -29,11 +28,46 @@ class StringUtils {
         }
     }
 
-    public static String keyToString(PublicKey sender) {
-        return new String();
+    public static String keyToString(Key key) {
+        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
+    /** Encrypts data with a private ECDSA key.
+     *
+     * @param privateKey the ECDSA key used to encrypt data
+     * @param data the data to be encrypted
+     * @return the encrypted data
+     */
     public static byte[] signWithEcdsa(PrivateKey privateKey, String data) {
-        return new byte[] {};
+        byte[] encryptedData;
+
+        try {
+            Signature dsa = Signature.getInstance("ECDSA", "BC");
+            dsa.initSign(privateKey);
+            dsa.update(data.getBytes());
+            encryptedData = dsa.sign();
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return encryptedData;
+    }
+
+    /** Verifies that a signature matches a public ECDSA key.
+     *
+     * @param key the provided public ECDSA key to verify
+     * @param data the data which was encrypted with a private key
+     * @param signature the encrypted data
+     * @return true if the public key matches the private key used to encrypt data; false otherwise
+     */
+    public static boolean verifyEcdsa(PublicKey key, String data, byte[] signature) {
+        try{
+            Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
+            ecdsaVerify.initVerify(key);
+            ecdsaVerify.update(data.getBytes());
+            return ecdsaVerify.verify(signature);
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
