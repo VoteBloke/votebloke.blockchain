@@ -2,6 +2,7 @@ package blockchain;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /** Represents a single vote in particular elections.
  *
@@ -56,13 +57,13 @@ public class Vote extends Entry {
         } else {
             throw new IllegalArgumentException("Vote needs Elections to processEntry");
         }
-        if(electionsId != elections.getId()) {
+        if(!Objects.equals(electionsId, elections.getId())) {
             throw new IllegalArgumentException("Vote.electionsId does not match Elections' id");
         }
         if(answerInt >= elections.getAnswers().length || answerInt < -1) {
             throw new IllegalArgumentException("answerInt was out of range of possible answers");
         }
-        if(answer != "") {
+        if(!Objects.equals(answer, "")) {
             boolean answerIsPossible = false;
             for(int i = 0; i < elections.getAnswers().length; i++) {
                 if(elections.getAnswers()[i].equals(answer)) {
@@ -71,7 +72,7 @@ public class Vote extends Entry {
                     break;
                 }
             }
-            if(answerIsPossible == false) {
+            if(!answerIsPossible) {
                 throw new IllegalArgumentException("answer is not an element of possible Elections' answers");
             }
         } else {
