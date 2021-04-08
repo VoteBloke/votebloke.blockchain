@@ -80,7 +80,8 @@ public class Elections extends Entry {
 
     public final PublicKey getElectionCaller() { return electionCaller; }
 
-    public final String getElectionsId() { return electionsId; }
+    @Override
+    public final String getId() { return electionsId; }
 
     public final String getQuestion() {
         return electionsQuestion;
@@ -93,7 +94,7 @@ public class Elections extends Entry {
     public final void setAnswers(String[] answers) { this.answers = answers; }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "Elections: " + electionsId +
                 "\nQuestion:" + electionsQuestion +
                 "\nAnswers: " + Arrays.toString(answers);

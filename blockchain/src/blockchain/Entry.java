@@ -18,6 +18,7 @@ public abstract class Entry {
     }
 
     public abstract void processEntry(ArrayList<Entry> inputEntries) throws IllegalArgumentException;
+    public abstract String getId();
 
     public Date getTimeStamp() {
         return timeStamp;
