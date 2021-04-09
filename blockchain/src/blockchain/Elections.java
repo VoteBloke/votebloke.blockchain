@@ -78,7 +78,7 @@ public class Elections extends Entry {
         processEntry(null);
     }
 
-    public final PublicKey getElectionCaller() { return electionCaller; }
+    public final PublicKey getElectionsCaller() { return electionCaller; }
 
     @Override
     public final String getId() { return electionsId; }
