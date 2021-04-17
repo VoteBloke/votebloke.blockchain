@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-/** This is a Block class.
- *  Represents a single block in the blockchain.
+/**
+ * This is a Block class.
+ * Represents a single block in the blockchain.
  */
 public class Block {
-    /** Constructor for the Block class.
+    /**
+     * Constructor for the Block class.
      *
-     * @param previousHash the hash of the previous Block
-     * @param blockVersion the version of this Block
+     * @param previousHash     the hash of the previous Block
+     * @param blockVersion     the version of this Block
      * @param miningDifficulty the mining difficulty of this Block
      */
     public Block(String previousHash, String blockVersion, int miningDifficulty) {
@@ -32,7 +34,8 @@ public class Block {
     private String blockVersion;
     private int miningDifficulty;
 
-    /** toString override.
+    /**
+     * toString override.
      *
      * @return the text representation of this Block.
      */
@@ -44,10 +47,11 @@ public class Block {
                 timeStamp.toString() +
                 " version: " +
                 blockVersion
-                );
+        );
     }
 
-    /** timeStamp getter.
+    /**
+     * timeStamp getter.
      *
      * @return a Date object with the date of creation of this Block.
      */
@@ -55,7 +59,8 @@ public class Block {
         return this.timeStamp;
     }
 
-    /** ID getter.
+    /**
+     * ID getter.
      * ID of a Block is calculated based on the time stamp, previous hash and block version.
      *
      * @return this Block's ID
@@ -64,19 +69,22 @@ public class Block {
         return this.id;
     }
 
-    /** Hash getter.
+    /**
+     * Hash getter.
+     *
      * @return this Block's hash
-    */
+     */
     public String getHash() {
         return this.hash;
     }
 
-    /** Adds a Transaction to this Block.
+    /**
+     * Adds a Transaction to this Block.
      *
      * @param transaction the transaction to be added
      */
     public void addTransaction(Transaction transaction) {
-        if(validateTransaction(transaction)) this.transactions.add(transaction);
+        if (validateTransaction(transaction)) this.transactions.add(transaction);
     }
 
     private boolean validateTransaction(Transaction transaction) {
@@ -87,7 +95,8 @@ public class Block {
         return this.timeStamp.toString() + this.blockVersion + this.previousHash;
     }
 
-    /** Calculates this \code{Block}'s id.
+    /**
+     * Calculates this \code{Block}'s id.
      * Returns a 64-digit long representation of this Block.
      *
      * @return this Block's id
@@ -96,14 +105,14 @@ public class Block {
         return StringUtils.stringToHex(this.getHeader());
     }
 
-    /** Mines the hash of this Block.
-     *
+    /**
+     * Mines the hash of this Block.
      */
     public void mineHash() {
         String hashBase = getHeader() + transactions.toString();
         String targetPrefix = new String(new char[miningDifficulty]).replace("\0", " ");
         while (hash.equals("")) {
-            if(targetPrefix.equals(StringUtils.stringToHex(hashBase + nonce).substring(0,
+            if (targetPrefix.equals(StringUtils.stringToHex(hashBase + nonce).substring(0,
                     miningDifficulty))) {
                 hash = StringUtils.stringToHex(hashBase + nonce);
             } else {
@@ -112,7 +121,8 @@ public class Block {
         }
     }
 
-    /** Validates this Block.
+    /**
+     * Validates this Block.
      *
      * @return true if this Block is valid; false otherwise
      */
@@ -122,9 +132,9 @@ public class Block {
                 if (!validateTransaction(t)) return false;
             }
 
-            if(!StringUtils.stringToHex(getHeader() +
+            if (!StringUtils.stringToHex(getHeader() +
                     transactions.toString() + nonce).equals(getHash())) return false;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
