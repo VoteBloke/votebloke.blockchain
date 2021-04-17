@@ -2,10 +2,11 @@ package blockchain;
 
 import java.util.ArrayList;
 
-/** Represents the blockchain.
+/**
+ * Represents the blockchain.
  * Performs following operations: <ul>
- *     <li>Adding a Block to this blockchain.</li>
- *     <li>Validating this blockchain.</li>
+ * <li>Adding a Block to this blockchain.</li>
+ * <li>Validating this blockchain.</li>
  * </ul>
  */
 public class Chain {
@@ -13,7 +14,8 @@ public class Chain {
     private String latestBlockHash;
 
 
-    /** Represents a blockchain.
+    /**
+     * Represents a blockchain.
      *
      * @param genesisBlock the first Block in the blockchain
      */
@@ -21,17 +23,18 @@ public class Chain {
         blockchain.add(genesisBlock);
     }
 
-    /** Validates this blockchain.
+    /**
+     * Validates this blockchain.
      *
      * @return true if this blockchain is valid, false otherwise
      */
     public boolean isChainValid() {
         try {
-            if(!blockchain.get(0).isBlockValid()) return false;
-            for(int i = 1; i < blockchain.size(); i++) {
+            if (!blockchain.get(0).isBlockValid()) return false;
+            for (int i = 1; i < blockchain.size(); i++) {
                 Block block = blockchain.get(i), previous_block = blockchain.get(i - 1);
-                if(!block.isBlockValid()) return false;
-                if(!previous_block.getHash().equals(block.getHash())) return false;
+                if (!block.isBlockValid()) return false;
+                if (!previous_block.getHash().equals(block.getHash())) return false;
             }
 
             return true;
@@ -40,13 +43,14 @@ public class Chain {
         }
     }
 
-    /** Adds a Block to this Chain.
+    /**
+     * Adds a Block to this Chain.
      *
      * @param block the valid Block to add
      * @return true if the Block was added successfully; false otherwise
      */
     public boolean addBlock(Block block) {
-        if(block.isBlockValid()) {
+        if (block.isBlockValid()) {
             blockchain.add(block);
             latestBlockHash = block.getHash();
             return true;
@@ -55,7 +59,8 @@ public class Chain {
         }
     }
 
-    /** Returns the hash of the newest block in this Chain.
+    /**
+     * Returns the hash of the newest block in this Chain.
      *
      * @return the hash of the newest block in this chain
      */
@@ -63,7 +68,8 @@ public class Chain {
         return latestBlockHash;
     }
 
-    /** Return the length of this Chain.
+    /**
+     * Return the length of this Chain.
      *
      * @return the length of this Chain (including the genesis block)
      */
@@ -71,7 +77,8 @@ public class Chain {
         return blockchain.size();
     }
 
-    /** Returns the Block from this Chain.
+    /**
+     * Returns the Block from this Chain.
      *
      * @param position the position of the Block to return
      * @return the Block from this Chain

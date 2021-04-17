@@ -24,8 +24,9 @@ public class Transaction {
         return new ArrayList<>();
     }
 
-    /** Calculates and internally assigns it to the id of this Transaction.
-     *
+    /**
+     * Calculates and internally assigns it to the id of this Transaction.
+     * <p>
      * The hashed objects include: the public key of the author of this Transaction, the time stamp of creation of
      * this Transaction, the string representation of the data in this Transaction.
      */
@@ -34,8 +35,9 @@ public class Transaction {
     }
 
 
-    /** Signs the data with an ECDSA private key.
-     *
+    /**
+     * Signs the data with an ECDSA private key.
+     * <p>
      * Signed data includes: the public key of the signee, the time stamp and the string representation of the data
      * in this Transaction.
      *
@@ -46,8 +48,9 @@ public class Transaction {
         signature = StringUtils.signWithEcdsa(privateKey, data);
     }
 
-    /** Verifies if this Transaction's signee matches the signature.
-     *
+    /**
+     * Verifies if this Transaction's signee matches the signature.
+     * <p>
      * The public ECDSA key is verified against the encrypted data.
      *
      * @return true if the signature matches the signee; false otherwise
