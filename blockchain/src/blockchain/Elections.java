@@ -1,8 +1,8 @@
 package blockchain;
 
 import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /** Represents a call for Elections.
  *
@@ -16,7 +16,7 @@ public class Elections extends Entry {
     /**
      * The 64-digit hex string identifying this Elections.
      */
-    private String electionsId;
+    private String id;
     /**
      * The question asked in this Elections.
      */
@@ -60,7 +60,7 @@ public class Elections extends Entry {
      * @throws IllegalArgumentException if the inputEntries are different than null
      */
     @Override
-    final public void processEntry(ArrayList<Entry> inputEntries) throws IllegalArgumentException {
+    final public void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
         if(inputEntries != null) {
             throw new IllegalArgumentException(
                     "inputEntries needs to be null in new Elections(ArrayList<Entry> inputEntries");
@@ -70,8 +70,14 @@ public class Elections extends Entry {
             throw new RuntimeException("The array of answers must be of length > 0");
         }
 
-        electionsId = StringUtils.stringToHex(StringUtils.keyToString(electionCaller) + getTimeStamp() +
+        id = StringUtils.stringToHex(StringUtils.keyToString(electionCaller) + getTimeStamp() +
                 electionsQuestion + Arrays.toString(answers));
+    }
+
+    @Override
+    public boolean validateEntry() {
+        return getId().equals(StringUtils.stringToHex(StringUtils.keyToString(electionCaller) + getTimeStamp() +
+                electionsQuestion + Arrays.toString(answers)));
     }
 
     final public void processEntry() throws IllegalArgumentException {
@@ -81,7 +87,7 @@ public class Elections extends Entry {
     public final PublicKey getElectionsCaller() { return electionCaller; }
 
     @Override
-    public final String getId() { return electionsId; }
+    public final String getId() { return id; }
 
     public final String getQuestion() {
         return electionsQuestion;
@@ -95,7 +101,7 @@ public class Elections extends Entry {
 
     @Override
     public final String toString() {
-        return "Elections: " + electionsId +
+        return "Elections: " + id +
                 "\nQuestion:" + electionsQuestion +
                 "\nAnswers: " + Arrays.toString(answers);
     }

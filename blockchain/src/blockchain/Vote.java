@@ -1,9 +1,8 @@
 package blockchain;
 
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /** Represents a single vote in particular elections.
@@ -29,7 +28,7 @@ public class Vote extends Entry {
     /**
      * The id of this Vote.
      */
-    private String voteId;
+    private String id;
 
     public Vote(PublicKey voter, Elections elections, int answerInt) {
         super();
@@ -56,7 +55,7 @@ public class Vote extends Entry {
     }
 
     @Override
-    final public void processEntry(ArrayList<Entry> inputEntries) throws IllegalArgumentException {
+    final public void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
         if(inputEntries.size() != 1) {
             throw new IllegalArgumentException("inputEntries must be of length 1 in new Vote(...)");
         }
@@ -85,18 +84,28 @@ public class Vote extends Entry {
             this.answer = elections.getAnswers()[answerInt];
         }
 
-        voteId = StringUtils.stringToHex(
+        id = StringUtils.stringToHex(
                 StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp()
         );
     }
 
+    @Override
+    public boolean validateEntry() {
+        return getId().equals(StringUtils.stringToHex(
+                StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp()));
+    }
+
     final public void processEntry() {
-        processEntry(new ArrayList<Entry>(Collections.singletonList(elections)));
+        processEntry(Collections.singletonList(elections));
+    }
+
+    final public void processEntry(Elections elections) {
+        processEntry(Collections.singletonList(elections));
     }
 
     @Override
     final public String getId() {
-        return voteId;
+        return id;
     }
 
     final public String getElectionsId() {
@@ -105,10 +114,6 @@ public class Vote extends Entry {
 
     final public String getAnswer() {
         return answer;
-    }
-
-    final public String getVoteId() {
-        return voteId;
     }
 
     @Override

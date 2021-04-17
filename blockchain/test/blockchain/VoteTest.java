@@ -27,6 +27,8 @@ class VoteTest {
 
     @Test
     void voteConstructors() {
+        Elections elections = new Elections(voter);
         assertDoesNotThrow(() -> new Vote(voter));
+        assertDoesNotThrow(() -> new Vote(voter, elections));
     }
 }

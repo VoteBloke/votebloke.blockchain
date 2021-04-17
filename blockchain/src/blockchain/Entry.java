@@ -1,7 +1,7 @@
 package blockchain;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /** The abstraction of data stored in a single Transaction.
  *
@@ -17,10 +17,11 @@ public abstract class Entry {
         this.timeStamp = new Date(System.currentTimeMillis());
     }
 
-    public abstract void processEntry(ArrayList<Entry> inputEntries) throws IllegalArgumentException;
+    public abstract void processEntry(List<Object> inputEntries) throws IllegalArgumentException;
+    public abstract boolean validateEntry();
     public abstract String getId();
 
-    public Date getTimeStamp() {
+    final public Date getTimeStamp() {
         return timeStamp;
     }
 }
