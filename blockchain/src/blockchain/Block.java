@@ -79,7 +79,9 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
-    if (validateTransaction(transaction)) this.transactions.add(transaction);
+    if (validateTransaction(transaction)) {
+      this.transactions.add(transaction);
+    }
   }
 
   private boolean validateTransaction(Transaction transaction) {
@@ -102,7 +104,7 @@ public class Block {
   /** Mines the hash of this Block. */
   public void mineHash() {
     String hashBase = getHeader() + transactions.toString();
-    String targetPrefix = new String(new char[miningDifficulty]).replace("\0", " ");
+    String targetPrefix = new String(new char[miningDifficulty]).replace("\0", "0");
     while (hash.equals("")) {
       if (targetPrefix.equals(
           StringUtils.hashString(hashBase + nonce).substring(0, miningDifficulty))) {
@@ -121,12 +123,17 @@ public class Block {
   public boolean isBlockValid() {
     try {
       for (Transaction t : transactions) {
-        if (!validateTransaction(t)) return false;
+        if (!validateTransaction(t)) {
+          return false;
+        }
       }
 
-      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce).equals(getHash()))
+      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce)
+          .equals(getHash())) {
         return false;
+      }
     } catch (Exception e) {
+      System.out.println(e);
       return false;
     }
 
