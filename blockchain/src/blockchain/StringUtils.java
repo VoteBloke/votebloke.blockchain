@@ -11,7 +11,7 @@ class StringUtils {
      * @param text the string to be converted.
      * @return the hex representation of byte-representation of the \code{text}
      */
-    public static String stringToHex(String text) {
+    public static String hashString(String text) {
         try {
             final MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedHeader = md.digest(text.getBytes(StandardCharsets.UTF_8));

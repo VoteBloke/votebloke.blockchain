@@ -102,7 +102,7 @@ public class Block {
      * @return this Block's id
      */
     private String calculateId() {
-        return StringUtils.stringToHex(this.getHeader());
+        return StringUtils.hashString(this.getHeader());
     }
 
     /**
