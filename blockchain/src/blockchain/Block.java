@@ -79,7 +79,9 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
-    if (validateTransaction(transaction)) this.transactions.add(transaction);
+    if (validateTransaction(transaction)) {
+      this.transactions.add(transaction);
+    }
   }
 
   private boolean validateTransaction(Transaction transaction) {
@@ -126,8 +128,10 @@ public class Block {
         }
       }
 
-      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce).equals(getHash()))
+      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce)
+          .equals(getHash())) {
         return false;
+      }
     } catch (Exception e) {
       return false;
     }

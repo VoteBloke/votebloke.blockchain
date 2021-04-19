@@ -30,11 +30,18 @@ public class Chain {
    */
   public boolean isChainValid() {
     try {
-      if (!blockchain.get(0).isBlockValid()) return false;
+      if (!blockchain.get(0).isBlockValid()) {
+          return false;
+      }
       for (int i = 1; i < blockchain.size(); i++) {
-        Block block = blockchain.get(i), previous_block = blockchain.get(i - 1);
-        if (!block.isBlockValid()) return false;
-        if (!previous_block.getHash().equals(block.getHash())) return false;
+        Block block = blockchain.get(i);
+        Block previousBlock = blockchain.get(i - 1);
+        if (!block.isBlockValid()) {
+            return false;
+        }
+        if (!previousBlock.getHash().equals(block.getHash())) {
+            return false;
+        }
       }
 
       return true;
