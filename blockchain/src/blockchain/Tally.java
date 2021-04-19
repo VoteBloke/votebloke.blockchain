@@ -4,12 +4,27 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+/** A representation of a tally of votes in particular elections. */
 public class Tally extends Entry {
+  /** The unique identifier of this Tally. */
   private String id;
-  private Elections elections;
-  private List<Vote> votes;
-  private PublicKey teller;
 
+  /** The elections that are tallied in this Tally. */
+  private Elections elections;
+
+  /** The Vote objects getting tallied in this Tally. */
+  private List<Vote> votes;
+
+  /** The public ECDSA key of Account that tallies the votes in the elections. */
+  private final PublicKey teller;
+
+  /**
+   * @param teller the public ECDSA key of Account that tallies the votes in the elections
+   * @param inputEntries the list comprised of a single Elections object at the first position and
+   *     Vote objects getting tallied in this Tally in the following positions
+   * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
+   *     are itself not validated
+   */
   public Tally(PublicKey teller, List<Object> inputEntries) throws IllegalArgumentException {
     super();
     this.teller = teller;
@@ -17,6 +32,13 @@ public class Tally extends Entry {
     setVotes(inputEntries.subList(1, inputEntries.size() - 1));
   }
 
+  /**
+   * @param teller the public ECDSA key of Account that tallies the votes in the elections
+   * @param elections the Elections object representing the elections that get tallied in this Tally
+   * @param votes the list of Vote objects to tally
+   * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
+   *     are itself not validated
+   */
   public Tally(PublicKey teller, Elections elections, List<Vote> votes) {
     super();
     this.teller = teller;
@@ -24,26 +46,32 @@ public class Tally extends Entry {
     this.votes = votes;
   }
 
+  /** @param teller the public ECDSA key of Account that tallies the votes in the elections */
   public Tally(PublicKey teller) {
     this(teller, null, null);
   }
 
+  /**
+   * Processes this Tally. Performs basic validation checks and sets up the id of this Tally.
+   *
+   * @param inputEntries the list comprised of a single Elections object at the first position and
+   *     Vote objects getting tallied in this Tally in the following positions
+   * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
+   *     are itself not validated
+   */
   @Override
   public final void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
     processEntry(inputEntries.get(0), inputEntries.subList(1, inputEntries.size() - 1));
   }
 
-  @Override
-  public boolean validateEntry() {
-    return getId()
-        .equals(
-            StringUtils.stringToHex(
-                StringUtils.keyToString(teller)
-                    + elections.getId()
-                    + votes.toString()
-                    + getTimeStamp()));
-  }
-
+  /**
+   * Processes this Tally. Performs basic validation checks and sets up the id of this Tally.
+   *
+   * @param elections the Elections object representing the elections that get tallied in this Tally
+   * @param votes the list of Vote objects to tally
+   * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
+   *     are itself not validated
+   */
   public final void processEntry(Object elections, List<Object> votes)
       throws IllegalArgumentException {
     setElections(elections);
@@ -51,6 +79,12 @@ public class Tally extends Entry {
     processEntry();
   }
 
+  /**
+   * Processes this Tally. Performs basic validation checks and sets up the id of this Tally.
+   *
+   * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
+   *     are itself not validated
+   */
   public final void processEntry() throws RuntimeException {
     if (!elections.validateEntry()) {
       throw new RuntimeException(
@@ -77,6 +111,26 @@ public class Tally extends Entry {
     updateId();
   }
 
+  /**
+   * @return true if the recalculated hash (id) matches the current if of this Tally; false
+   *     otherwise
+   */
+  @Override
+  public final boolean validateEntry() {
+    return getId()
+        .equals(
+            StringUtils.stringToHex(
+                StringUtils.keyToString(teller)
+                    + elections.getId()
+                    + votes.toString()
+                    + getTimeStamp()));
+  }
+
+  /**
+   * Casts `entry` to Elections and sets it as the Elections object of this Tally.
+   *
+   * @param entry the Entry object, which can be cast to Elections
+   */
   public final void setElections(Object entry) {
     Elections elections;
     try {
@@ -88,10 +142,19 @@ public class Tally extends Entry {
     this.elections = elections;
   }
 
+  /**
+   * @param elections the Elections object that determines what Vote objects this Tally wil count
+   */
   public final void setElections(Elections elections) {
     this.elections = elections;
   }
 
+  /**
+   * Casts each of the Entry objects in the passed list to Vote, then sets them as the Vote objects
+   * to be tallied by this Tally.
+   *
+   * @param entries the list of Entry objects
+   */
   public final void setVotes(List<Object> entries) {
     ArrayList<Vote> new_votes = new ArrayList<>();
     for (Object entry : entries) {
@@ -104,11 +167,16 @@ public class Tally extends Entry {
     this.votes = new_votes;
   }
 
+  /**
+   * The unique identifier of this Tally is a 64-digit hash of its contents.
+   *
+   * @return the unique identifier of this Tally */
   @Override
-  public String getId() {
+  public final String getId() {
     return id;
   }
 
+  /** Recalculates the unique identifier of this Tally. */
   private void updateId() {
     this.id =
         StringUtils.stringToHex(

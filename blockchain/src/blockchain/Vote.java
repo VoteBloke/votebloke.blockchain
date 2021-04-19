@@ -59,9 +59,12 @@ public class Vote extends Entry {
 
   /**
    * This method performs basic validation of `inputEntries` as well as the chosen answer to the
-   * question in the Elections' object passed to this Vote. Also, it calculates the unique identifier
-   * of this Vote. This method should be called before adding the Transaction that carries it to a
-   * Block object.
+   * question in the Elections' object passed to this Vote. Also, it calculates the unique
+   * identifier of this Vote. This method should be called before adding the Transaction that
+   * carries it to a Block object.
+   *
+   * <p>The iterable passed to this method should be of length one and contain a single Elections
+   * object corresponding to this Vote.
    *
    * @param inputEntries the iterable of Entry objects passed to this Vote
    * @throws IllegalArgumentException if either `inputEntries`, this Vote's answer are not valid
