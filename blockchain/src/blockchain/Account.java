@@ -11,6 +11,8 @@ public class Account {
   private PrivateKey privateKey;
 
   /**
+   * The constructor for the Account class.
+   *
    * @param publicKey the public ECDSA key of this Account
    * @param privateKey the private ECDSA key of this Account
    */
