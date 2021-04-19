@@ -20,15 +20,39 @@ public class Block {
     id = this.calculateId();
   }
 
+  /**
+   * The id of this Block. ID of a Block is calculated based on the time stamp, previous hash and
+   * block version.
+   */
   private String id;
+  /**
+   * The mined hash of this Block. Hash of this Block is mined based on the hash of the previous
+   * Block in the Chain, the time stamp of creating this Block, the version of this Block and
+   * Transactions in this Block.
+   */
   private String hash = "";
-  private String previousHash;
+
+  /** The hash of the previous Block in the Chain. */
+  private final String previousHash;
+
+  /** The Transactions added to this Block. */
   private ArrayList<Transaction> transactions = new ArrayList<>();
-  private Date timeStamp = new Date(System.currentTimeMillis());
+
+  /** The time stamp of the creation of this Block. */
+  private final Date timeStamp = new Date(System.currentTimeMillis());
+
+  /** The nonce of this Block. */
   private int nonce = 0;
+
   private String merkleRoot;
-  private String blockVersion;
-  private int miningDifficulty;
+  /** The version of this Block. */
+  private final String blockVersion;
+
+  /**
+   * The mining difficulty of this Block. This is the number of leading zeros required in the mined
+   * hash.
+   */
+  private final int miningDifficulty;
 
   /**
    * toString override.
@@ -55,8 +79,7 @@ public class Block {
   }
 
   /**
-   * ID getter. ID of a Block is calculated based on the time stamp, previous hash and block
-   * version.
+   * ID getter.
    *
    * @return this Block's ID
    */
@@ -67,7 +90,7 @@ public class Block {
   /**
    * Hash getter.
    *
-   * @return this Block's hash
+   * @return this Block's mined hash
    */
   public String getHash() {
     return this.hash;
@@ -79,11 +102,7 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
-    if (validateTransaction(transaction)) this.transactions.add(transaction);
-  }
-
-  private boolean validateTransaction(Transaction transaction) {
-    return true;
+    if (transaction.validate()) this.transactions.add(transaction);
   }
 
   private String getHeader() {
@@ -91,7 +110,7 @@ public class Block {
   }
 
   /**
-   * Calculates this \code{Block}'s id. Returns a 64-digit long representation of this Block.
+   * Calculates this \code{Block}'s id. Returns a 64-digit-long representation of this Block.
    *
    * @return this Block's id
    */
@@ -121,7 +140,7 @@ public class Block {
   public boolean isBlockValid() {
     try {
       for (Transaction t : transactions) {
-        if (!validateTransaction(t)) return false;
+        if (!t.validate()) return false;
       }
 
       if (!StringUtils.stringToHex(getHeader() + transactions.toString() + nonce).equals(getHash()))

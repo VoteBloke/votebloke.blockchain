@@ -62,6 +62,10 @@ public class Transaction {
         StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString(),
         signature);
   }
+
+  public boolean validate() {
+    return true;
+  }
 }
 
 class TransactionInput {
