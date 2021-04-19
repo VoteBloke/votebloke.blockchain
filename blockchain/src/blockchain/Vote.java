@@ -101,7 +101,7 @@ public class Vote extends Entry {
     }
 
     id =
-        StringUtils.stringToHex(
+        StringUtils.hashString(
             StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp());
   }
 
@@ -118,7 +118,7 @@ public class Vote extends Entry {
   public boolean validateEntry() {
     return getId()
         .equals(
-            StringUtils.stringToHex(
+            StringUtils.hashString(
                 StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp()));
   }
 

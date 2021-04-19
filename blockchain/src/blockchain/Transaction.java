@@ -68,4 +68,13 @@ public class Transaction {
         StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString(),
         signature);
   }
+
+  /**
+   * Validates this Transactions.
+   *
+   * @return true if validates; false otherwise
+   */
+  public boolean validate() {
+    return true;
+  }
 }

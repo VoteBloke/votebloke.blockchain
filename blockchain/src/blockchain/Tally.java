@@ -119,7 +119,7 @@ public class Tally extends Entry {
   public final boolean validateEntry() {
     return getId()
         .equals(
-            StringUtils.stringToHex(
+            StringUtils.hashString(
                 StringUtils.keyToString(teller)
                     + elections.getId()
                     + votes.toString()
@@ -179,7 +179,7 @@ public class Tally extends Entry {
   /** Recalculates the unique identifier of this Tally. */
   private void updateId() {
     this.id =
-        StringUtils.stringToHex(
+        StringUtils.hashString(
             StringUtils.keyToString(teller)
                 + elections.getId()
                 + votes.toString()

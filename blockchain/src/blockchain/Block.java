@@ -64,7 +64,7 @@ public class Block {
     return ("Block. ID: "
         + this.id
         + " date: "
-        + timeStamp.toString()
+        + timeStamp
         + " version: "
         + blockVersion);
   }
@@ -106,7 +106,7 @@ public class Block {
   }
 
   private String getHeader() {
-    return this.timeStamp.toString() + this.blockVersion + this.previousHash;
+    return this.timeStamp + this.blockVersion + this.previousHash;
   }
 
   /**
@@ -115,7 +115,7 @@ public class Block {
    * @return this Block's id
    */
   private String calculateId() {
-    return StringUtils.stringToHex(this.getHeader());
+    return StringUtils.hashString(this.getHeader());
   }
 
   /** Mines the hash of this Block. */
@@ -143,11 +143,11 @@ public class Block {
         if (!t.validate()) return false;
       }
 
-      if (!StringUtils.stringToHex(getHeader() + transactions.toString() + nonce).equals(getHash()))
+      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce).equals(getHash()))
         return false;
     } catch (Exception e) {
 
-      System.out.println(e);
+      System.out.println(e.getMessage());
       return false;
     }
 

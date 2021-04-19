@@ -70,7 +70,7 @@ public class Elections extends Entry {
     }
 
     id =
-        StringUtils.stringToHex(
+        StringUtils.hashString(
             StringUtils.keyToString(electionCaller)
                 + getTimeStamp()
                 + electionsQuestion
@@ -97,7 +97,7 @@ public class Elections extends Entry {
   public boolean validateEntry() {
     return getId()
         .equals(
-            StringUtils.stringToHex(
+            StringUtils.hashString(
                 StringUtils.keyToString(electionCaller)
                     + getTimeStamp()
                     + electionsQuestion
