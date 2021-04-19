@@ -43,27 +43,28 @@ public class Chain {
           return false;
         }
       }
-   * Adds a Block to this Chain.
-   *
-   * @param block the valid Block to add
-   * @return true if the Block was added successfully; false otherwise
-   */
-  /**
-  public boolean addBlock(Block block) {
-    if (block.isBlockValid()) {
-      blockchain.add(block);
-      latestBlockHash = block.getHash();
-    } else {
-      return true;
-      return false;
-  }
-    }
-
       return true;
     } catch (Exception e) {
       return false;
     }
   }
+
+  /**
+   * Adds a Block to this Chain.
+   *
+   * @param block the valid Block to add
+   * @return true if the Block was added successfully; false otherwise
+   */
+  public boolean addBlock(Block block) {
+    if (block.isBlockValid()) {
+      blockchain.add(block);
+      latestBlockHash = block.getHash();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Returns the hash of the newest block in this Chain.
    *
