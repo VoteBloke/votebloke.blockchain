@@ -121,7 +121,9 @@ public class Block {
   public boolean isBlockValid() {
     try {
       for (Transaction t : transactions) {
-        if (!validateTransaction(t)) return false;
+        if (!validateTransaction(t)) {
+          return false;
+        }
       }
 
       if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce).equals(getHash()))
