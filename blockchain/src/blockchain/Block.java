@@ -102,7 +102,7 @@ public class Block {
      * @return this Block's id
      */
     private String calculateId() {
-        return StringUtils.stringToHex(this.getHeader());
+        return StringUtils.hashString(this.getHeader());
     }
 
     /**
@@ -112,9 +112,9 @@ public class Block {
         String hashBase = getHeader() + transactions.toString();
         String targetPrefix = new String(new char[miningDifficulty]).replace("\0", " ");
         while (hash.equals("")) {
-            if (targetPrefix.equals(StringUtils.stringToHex(hashBase + nonce).substring(0,
+            if (targetPrefix.equals(StringUtils.hashString(hashBase + nonce).substring(0,
                     miningDifficulty))) {
-                hash = StringUtils.stringToHex(hashBase + nonce);
+                hash = StringUtils.hashString(hashBase + nonce);
             } else {
                 nonce += 1;
             }
@@ -132,7 +132,7 @@ public class Block {
                 if (!validateTransaction(t)) return false;
             }
 
-            if (!StringUtils.stringToHex(getHeader() +
+            if (!StringUtils.hashString(getHeader() +
                     transactions.toString() + nonce).equals(getHash())) return false;
         } catch (Exception e) {
             return false;
