@@ -19,6 +19,8 @@ public class Tally extends Entry {
   private final PublicKey teller;
 
   /**
+   * A constructor for Tally.
+   *
    * @param teller the public ECDSA key of Account that tallies the votes in the elections
    * @param inputEntries the list comprised of a single Elections object at the first position and
    *     Vote objects getting tallied in this Tally in the following positions
@@ -33,6 +35,8 @@ public class Tally extends Entry {
   }
 
   /**
+   * A constructor for Tally.
+   *
    * @param teller the public ECDSA key of Account that tallies the votes in the elections
    * @param elections the Elections object representing the elections that get tallied in this Tally
    * @param votes the list of Vote objects to tally
@@ -46,7 +50,11 @@ public class Tally extends Entry {
     this.votes = votes;
   }
 
-  /** @param teller the public ECDSA key of Account that tallies the votes in the elections */
+  /**
+   * A constructor for Tally.
+   *
+   * @param teller the public ECDSA key of Account that tallies the votes in the elections
+   */
   public Tally(PublicKey teller) {
     this(teller, null, null);
   }
@@ -112,6 +120,8 @@ public class Tally extends Entry {
   }
 
   /**
+   * Validates this Tally.
+   *
    * @return true if the recalculated hash (id) matches the current if of this Tally; false
    *     otherwise
    */
@@ -143,6 +153,8 @@ public class Tally extends Entry {
   }
 
   /**
+   * Sets Elections of this Tally.
+   *
    * @param elections the Elections object that determines what Vote objects this Tally wil count
    */
   public final void setElections(Elections elections) {
@@ -156,7 +168,7 @@ public class Tally extends Entry {
    * @param entries the list of Entry objects
    */
   public final void setVotes(List<Object> entries) {
-    ArrayList<Vote> new_votes = new ArrayList<>();
+    ArrayList<Vote> newVotes = new ArrayList<>();
     for (Object entry : entries) {
       try {
         votes.add((Vote) entry);
@@ -164,13 +176,14 @@ public class Tally extends Entry {
         throw new IllegalArgumentException("All elements of entries must be of type Vote");
       }
     }
-    this.votes = new_votes;
+    this.votes = newVotes;
   }
 
   /**
    * The unique identifier of this Tally is a 64-digit hash of its contents.
    *
-   * @return the unique identifier of this Tally */
+   * @return the unique identifier of this Tally
+   */
   @Override
   public final String getId() {
     return id;

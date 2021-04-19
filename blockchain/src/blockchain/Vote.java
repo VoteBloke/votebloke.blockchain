@@ -19,6 +19,8 @@ public class Vote extends Entry {
   private String id;
 
   /**
+   * A constructor for Vote.
+   *
    * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
    * @param elections the elections this Vote was cast in
    * @param answerInt the number of an answer in elections
@@ -32,6 +34,8 @@ public class Vote extends Entry {
   }
 
   /**
+   * A constructor for Vote.
+   *
    * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
    * @param elections the elections this Vote was cast in
    * @param answer the chosen answer to elections
@@ -45,6 +49,8 @@ public class Vote extends Entry {
   }
 
   /**
+   * A constructor for Vote.
+   *
    * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
    * @param elections the elections this Vote was cast in
    */
@@ -52,7 +58,11 @@ public class Vote extends Entry {
     this(voter, elections, null);
   }
 
-  /** @param voter the public ECDSA key identifying the agent who cast this Vote in elections */
+  /**
+   * A constructor for Vote.
+   *
+   * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
+   */
   public Vote(PublicKey voter) {
     this(voter, null, null);
   }
@@ -113,7 +123,11 @@ public class Vote extends Entry {
     processEntry(Collections.singletonList(elections));
   }
 
-  /** @return true if this Vote's current id matches the recalculated id; false otherwise */
+  /**
+   * Validates this Vote.
+   *
+   * @return true if this Vote's current id matches the recalculated id; false otherwise
+   */
   @Override
   public boolean validateEntry() {
     return getId()

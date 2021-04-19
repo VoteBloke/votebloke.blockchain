@@ -61,12 +61,7 @@ public class Block {
    */
   @Override
   public String toString() {
-    return ("Block. ID: "
-        + this.id
-        + " date: "
-        + timeStamp
-        + " version: "
-        + blockVersion);
+    return ("Block. ID: " + this.id + " date: " + timeStamp + " version: " + blockVersion);
   }
 
   /**
@@ -102,7 +97,9 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
-    if (transaction.validate()) this.transactions.add(transaction);
+    if (transaction.validate()) {
+      this.transactions.add(transaction);
+    }
   }
 
   private String getHeader() {
@@ -140,13 +137,16 @@ public class Block {
   public boolean isBlockValid() {
     try {
       for (Transaction t : transactions) {
-        if (!t.validate()) return false;
+        if (!t.validate()) {
+          return false;
+        }
       }
 
-      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce).equals(getHash()))
+      if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce)
+          .equals(getHash())) {
         return false;
+        }
     } catch (Exception e) {
-
       System.out.println(e.getMessage());
       return false;
     }

@@ -20,6 +20,8 @@ public class Elections extends Entry {
   private String[] answers;
 
   /**
+   * The constructor for Elections.
+   *
    * @param electionCaller the public ECDSA key of the Account starting this Elections
    * @param electionsQuestion the question posed in this Elections
    * @param answers the array of possible answers to the question asked in this Elections
@@ -91,6 +93,8 @@ public class Elections extends Entry {
   }
 
   /**
+   * Validates this Elections.
+   *
    * @return true if the recalculated id of this Elections matches the current id of this Elections
    */
   @Override
