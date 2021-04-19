@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Block {
-    /** This is a Block class.
+    /**
+     * This is a Block class.
      * <p>
-     *     This is a longer description of the Block class.
+     * This is a longer description of the Block class.
      * </p>
-     *
-     *
      */
     public Block() {
     }
@@ -34,7 +33,7 @@ public class Block {
                 timeStamp.toString() +
                 " version: " +
                 blockVersion
-                );
+        );
     }
 
     public String calculateHash() throws NoSuchAlgorithmException {
