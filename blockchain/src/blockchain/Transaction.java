@@ -5,6 +5,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 
+/** A representation of a single transaction in the blockchain. */
 public class Transaction {
   public ArrayList<TransactionInput> inputs;
   public Entry data;
@@ -13,6 +14,11 @@ public class Transaction {
   private byte[] signature;
   private Date timeStamp;
 
+  /**
+   * @param signee the public ECDSA key of the agent signing this Transaction
+   * @param data the data inside this Transaction
+   * @param inputs the list of Transaction consisting the input for this Transaction
+   */
   public Transaction(PublicKey signee, Entry data, ArrayList<TransactionInput> inputs) {
     this.signee = signee;
     this.data = data;
@@ -61,41 +67,5 @@ public class Transaction {
         signee,
         StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString(),
         signature);
-  }
-}
-
-class TransactionInput {
-  /**
-   * The reference to a Transaction object associated with TransactionOutput objects needed to
-   * process a new Transaction.
-   */
-  String transactionOutputId;
-
-  /** The TransactionOutput object behind this TransactionInput */
-  TransactionOutput transactionOut;
-
-  TransactionInput(String transactionOutputId) {
-    this.transactionOutputId = transactionOutputId;
-  }
-}
-
-class TransactionOutput {
-  /** The id of this Transaction. */
-  String id;
-  /** The public key this TransactionOutput was addressed to. */
-  PublicKey recipient;
-  /** Data associated with this TransactionOutput. */
-  Entry data;
-  /** The id of the Transaction object, which created this TransactionOutput. */
-  String parentTransactionId;
-
-  TransactionOutput(PublicKey recipient, Entry data, String parentTransactionId) {
-    this.recipient = recipient;
-    this.data = data;
-    this.parentTransactionId = parentTransactionId;
-  }
-
-  boolean isAdressedTo(PublicKey key) {
-    return key == recipient;
   }
 }

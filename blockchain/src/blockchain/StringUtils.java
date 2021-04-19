@@ -23,7 +23,9 @@ class StringUtils {
       StringBuilder hexHash = new StringBuilder();
       for (byte b : hashedHeader) {
         String hexDigits = Integer.toHexString(0xff & b);
-        if (hexDigits.length() == 1) hexHash.append("0");
+        if (hexDigits.length() == 1) {
+          hexHash.append("0");
+        }
         hexHash.append(hexDigits);
       }
       return hexHash.toString();
