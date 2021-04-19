@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** Represents a single vote in particular elections. */
 public class Vote extends Entry {
-  /** The public ECDSA key of the account which votes. */
+  /** The public ECDSA key of the account which votes - the voter. */
   private final PublicKey voter;
   /** The id of Elections this Vote was cast in. */
   private Elections elections;
@@ -18,6 +18,11 @@ public class Vote extends Entry {
   /** The id of this Vote. */
   private String id;
 
+  /**
+   * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
+   * @param elections the elections this Vote was cast in
+   * @param answerInt the number of an answer in elections
+   */
   public Vote(PublicKey voter, Elections elections, int answerInt) {
     super();
     this.voter = voter;
@@ -26,6 +31,11 @@ public class Vote extends Entry {
     this.answer = null;
   }
 
+  /**
+   * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
+   * @param elections the elections this Vote was cast in
+   * @param answer the chosen answer to elections
+   */
   public Vote(PublicKey voter, Elections elections, String answer) {
     super();
     this.voter = voter;
@@ -34,14 +44,28 @@ public class Vote extends Entry {
     answerInt = -1;
   }
 
+  /**
+   * @param voter the public ECDSA key identifying the agent who cast this Vote in elections
+   * @param elections the elections this Vote was cast in
+   */
   public Vote(PublicKey voter, Elections elections) {
     this(voter, elections, null);
   }
 
+  /** @param voter the public ECDSA key identifying the agent who cast this Vote in elections */
   public Vote(PublicKey voter) {
     this(voter, null, null);
   }
 
+  /**
+   * This method performs basic validation of `inputEntries` as well as the chosen answer to the
+   * question in the Elections' object passed to this Vote. Also, it calculates the unique identifier
+   * of this Vote. This method should be called before adding the Transaction that carries it to a
+   * Block object.
+   *
+   * @param inputEntries the iterable of Entry objects passed to this Vote
+   * @throws IllegalArgumentException if either `inputEntries`, this Vote's answer are not valid
+   */
   @Override
   public final void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
     if (inputEntries.size() != 1) {
@@ -78,20 +102,21 @@ public class Vote extends Entry {
             StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp());
   }
 
-  @Override
-  public boolean validateEntry() {
-    return getId()
-        .equals(
-            StringUtils.stringToHex(
-                StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp()));
+  public final void processEntry(Elections elections) {
+    processEntry(Collections.singletonList(elections));
   }
 
   public final void processEntry() {
     processEntry(Collections.singletonList(elections));
   }
 
-  public final void processEntry(Elections elections) {
-    processEntry(Collections.singletonList(elections));
+  /** @return true if this Vote's current id matches the recalculated id; false otherwise */
+  @Override
+  public boolean validateEntry() {
+    return getId()
+        .equals(
+            StringUtils.stringToHex(
+                StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp()));
   }
 
   @Override
