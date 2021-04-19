@@ -31,7 +31,7 @@ public class Transaction {
      * this Transaction, the string representation of the data in this Transaction.
      */
     private void calculateHash() {
-        id = StringUtils.hashString(StringUtils.keyToString(signee) + data.toString() + timeStamp.toString());
+        id = StringUtils.stringToHex(StringUtils.keyToString(signee) + data.toString() + timeStamp.toString());
     }
 
 
