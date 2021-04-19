@@ -16,8 +16,10 @@ public abstract class Entry {
 
   public abstract boolean validateEntry();
 
+  /** @return the id of this Entry */
   public abstract String getId();
 
+  /** @return the time stamp of creation of this Entry */
   public final Date getTimeStamp() {
     return timeStamp;
   }

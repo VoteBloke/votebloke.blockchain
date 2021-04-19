@@ -19,6 +19,11 @@ public class Elections extends Entry {
    */
   private String[] answers;
 
+  /**
+   * @param electionCaller the public ECDSA key of the Account starting this Elections
+   * @param electionsQuestion the question posed in this Elections
+   * @param answers the array of possible answers to the question asked in this Elections
+   */
   // Constructors
   public Elections(PublicKey electionCaller, String electionsQuestion, String[] answers) {
     super();
@@ -45,7 +50,8 @@ public class Elections extends Entry {
 
   // Methods
   /**
-   * Processes the input Entries and sets the state of this Elections
+   * Sets the id for this Elections. Performs basic checks on the question and answers in this
+   * Elections.
    *
    * <p>Elections must have null input entries.
    *
@@ -71,6 +77,22 @@ public class Elections extends Entry {
                 + Arrays.toString(answers));
   }
 
+  /**
+   * Performs basic checks on the question and answers in this Elections. Sets the id for this
+   * Elections.
+   *
+   * <p>Elections must have null input entries. Elections should be processed before adding them to
+   * a Transaction objects.
+   *
+   * @throws IllegalArgumentException if the inputEntries are different than null
+   */
+  public final void processEntry() throws IllegalArgumentException {
+    processEntry(null);
+  }
+
+  /**
+   * @return true if the recalculated id of this Elections matches the current id of this Elections
+   */
   @Override
   public boolean validateEntry() {
     return getId()
@@ -80,10 +102,6 @@ public class Elections extends Entry {
                     + getTimeStamp()
                     + electionsQuestion
                     + Arrays.toString(answers)));
-  }
-
-  public final void processEntry() throws IllegalArgumentException {
-    processEntry(null);
   }
 
   public final PublicKey getElectionsCaller() {
