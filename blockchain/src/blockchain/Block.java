@@ -121,11 +121,11 @@ public class Block {
   /** Mines the hash of this Block. */
   public void mineHash() {
     String hashBase = getHeader() + transactions.toString();
-    String targetPrefix = new String(new char[miningDifficulty]).replace("\0", " ");
+    String targetPrefix = new String(new char[miningDifficulty]).replace("\0", "0");
     while (hash.equals("")) {
       if (targetPrefix.equals(
-          StringUtils.stringToHex(hashBase + nonce).substring(0, miningDifficulty))) {
-        hash = StringUtils.stringToHex(hashBase + nonce);
+          StringUtils.hashString(hashBase + nonce).substring(0, miningDifficulty))) {
+        hash = StringUtils.hashString(hashBase + nonce);
       } else {
         nonce += 1;
       }
@@ -146,6 +146,8 @@ public class Block {
       if (!StringUtils.stringToHex(getHeader() + transactions.toString() + nonce).equals(getHash()))
         return false;
     } catch (Exception e) {
+
+      System.out.println(e);
       return false;
     }
 
