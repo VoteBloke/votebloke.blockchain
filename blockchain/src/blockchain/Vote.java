@@ -1,4 +1,3 @@
 package blockchain;
 
-public class Vote {
-}
+public class Vote {}

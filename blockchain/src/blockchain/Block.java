@@ -104,7 +104,7 @@ public class Block {
   /** Mines the hash of this Block. */
   public void mineHash() {
     String hashBase = getHeader() + transactions.toString();
-    String targetPrefix = new String(new char[miningDifficulty]).replace("\0", " ");
+    String targetPrefix = new String(new char[miningDifficulty]).replace("\0", "0");
     while (hash.equals("")) {
       if (targetPrefix.equals(
           StringUtils.hashString(hashBase + nonce).substring(0, miningDifficulty))) {
@@ -133,6 +133,7 @@ public class Block {
         return false;
       }
     } catch (Exception e) {
+      System.out.println(e);
       return false;
     }
 
