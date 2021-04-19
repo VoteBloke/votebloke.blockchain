@@ -145,7 +145,7 @@ public class Block {
       if (!StringUtils.hashString(getHeader() + transactions.toString() + nonce)
           .equals(getHash())) {
         return false;
-        }
+      }
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return false;
