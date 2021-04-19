@@ -11,6 +11,7 @@ on:
     branches:
     - master
     - devel
+
 jobs:
   # This workflow contains a single job called "build"
   build:
