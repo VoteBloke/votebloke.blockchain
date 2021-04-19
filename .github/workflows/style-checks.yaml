@@ -2,7 +2,15 @@
 
 name: Style checks
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - master
+    - devel
+  pull_request:
+    branches:
+    - master
+    - devel
 jobs:
   # This workflow contains a single job called "build"
   build:
