@@ -8,8 +8,8 @@ class StringUtils {
      * Converts a string to a hex representation of its bytes.
      * First converts the text to bytes then to hex.
      *
-     * @param text A string to be converted.
-     * @return Hex representation of byte-representation of the \code{text}.
+     * @param text the string to be converted.
+     * @return the hex representation of byte-representation of the \code{text}
      */
     public static String hashString(String text) {
         try {
