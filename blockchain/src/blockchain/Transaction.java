@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  * A representation of a single transaction in the blockchain - starting elections, casting a vote,
- * tallying elections
+ * tallying elections.
  */
 public class Transaction {
   /** The Transactions used by this Transaction to process its Entry. */
@@ -55,14 +55,15 @@ public class Transaction {
    *     inputs
    */
   public List<TransactionOutput> processTransaction() {
-    ArrayList<TransactionOutput> updatedOutputs = new ArrayList<>();
     ArrayList<Entry> inputEntries = new ArrayList<>();
 
-    for (TransactionInput inputTransaction : inputs)
+    for (TransactionInput inputTransaction : inputs) {
       inputEntries.add(inputTransaction.transactionOut.data);
+    }
 
     data.processEntry(inputEntries);
     calculateHash();
+    ArrayList<TransactionOutput> updatedOutputs = new ArrayList<>();
     updatedOutputs.add(new TransactionOutput(signee, data, getId()));
 
     return updatedOutputs;

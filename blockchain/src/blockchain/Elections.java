@@ -89,8 +89,8 @@ public class Elections extends Entry {
    * <p>Elections must have null input entries. Elections should be processed before adding them to
    * a Transaction objects.
    *
-   * @throws IllegalArgumentException if the inputEntries are different than null
    * @return this Elections object
+   * @throws IllegalArgumentException if the inputEntries are different than null
    */
   public final Entry processEntry() throws IllegalArgumentException {
     return (processEntry(null));
