@@ -78,9 +78,10 @@ public class Vote extends Entry {
    *
    * @param inputEntries the iterable of Entry objects passed to this Vote
    * @throws IllegalArgumentException if either `inputEntries`, this Vote's answer are not valid
+   * @return this Vote object
    */
   @Override
-  public final void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
+  public final Entry processEntry(List<Entry> inputEntries) throws IllegalArgumentException {
     if (inputEntries.size() != 1) {
       throw new IllegalArgumentException("inputEntries must be of length 1 in new Vote(...)");
     }
@@ -113,14 +114,16 @@ public class Vote extends Entry {
     id =
         StringUtils.hashString(
             StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp());
+
+    return this;
   }
 
-  public final void processEntry(Elections elections) {
-    processEntry(Collections.singletonList(elections));
+  public final Entry processEntry(Elections elections) {
+    return (processEntry(Collections.singletonList(elections)));
   }
 
-  public final void processEntry() {
-    processEntry(Collections.singletonList(elections));
+  public final Entry processEntry() {
+    return (processEntry(Collections.singletonList(elections)));
   }
 
   /**

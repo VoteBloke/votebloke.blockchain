@@ -4,30 +4,68 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
-/** A representation of a single transaction in the blockchain. */
+/**
+ * A representation of a single transaction in the blockchain - starting elections, casting a vote,
+ * tallying elections
+ */
 public class Transaction {
-  public ArrayList<TransactionInput> inputs;
+  /** The Transactions used by this Transaction to process its Entry. */
+  public List<TransactionInput> inputs;
+
+  /** The data stored in this Transaction. */
   public Entry data;
+
+  /** The public ECDSA key of the agent signing this Transaction. */
   public PublicKey signee;
-  private String id;
-  private byte[] signature;
-  private Date timeStamp;
 
   /**
+   * The 64-digit hex unique identifier of this Transaction. Calculated from this Transaction's:
+   * signee, data and timeStamp.
+   */
+  private String id;
+
+  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
+  private byte[] signature;
+
+  /** The time stamp of creation of this Transaction. */
+  private final Date timeStamp;
+
+  /**
+   * A constructor for Transaction.
+   *
    * @param signee the public ECDSA key of the agent signing this Transaction
    * @param data the data inside this Transaction
    * @param inputs the list of Transaction consisting the input for this Transaction
    */
-  public Transaction(PublicKey signee, Entry data, ArrayList<TransactionInput> inputs) {
+  public Transaction(PublicKey signee, Entry data, List<TransactionInput> inputs) {
     this.signee = signee;
     this.data = data;
     this.inputs = inputs;
     timeStamp = new Date(System.currentTimeMillis());
   }
 
-  public ArrayList<TransactionOutput> processTransaction() {
-    return new ArrayList<>();
+  /**
+   * Processes this Transaction. Sets up the Entry object of this Transaction, signs this
+   * Transaction and calculates the hash of this Transaction.
+   *
+   * @return the list of outputs corresponding to: this Transaction and unconsumed Transaction from
+   *     inputs
+   */
+  public List<TransactionOutput> processTransaction() {
+    ArrayList<TransactionOutput> updatedOutputs = new ArrayList<>();
+    ArrayList<Entry> inputEntries = new ArrayList<>();
+
+    for (TransactionInput inputTransaction : inputs)
+      inputEntries.add(inputTransaction.transactionOut.data);
+
+    data.processEntry(inputEntries);
+    calculateHash();
+    updatedOutputs.add(new TransactionOutput(signee, data, getId()));
+
+    return updatedOutputs;
   }
 
   /**
@@ -50,7 +88,7 @@ public class Transaction {
    *
    * @param privateKey the private ECDSA key used to encrypt the data
    */
-  public void generateSignature(PrivateKey privateKey) {
+  public void sign(PrivateKey privateKey) {
     String data = StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
     signature = StringUtils.signWithEcdsa(privateKey, data);
   }
@@ -72,9 +110,26 @@ public class Transaction {
   /**
    * Validates this Transactions.
    *
-   * @return true if validates; false otherwise
+   * @return true if the public ECDSA key of the signee matches the signature and the recalculated
+   *     hash matches the current hash of this Transaction; false otherwise
    */
   public boolean validate() {
-    return true;
+    String currentHash = this.id;
+    calculateHash();
+    if (verifySignature() && Objects.equals(currentHash, this.id)) {
+      return true;
+    } else {
+      this.id = currentHash;
+      return false;
+    }
+  }
+
+  /**
+   * Getter of this Transaction's id.
+   *
+   * @return the 64-digit hex unique identifier of this Transaction
+   */
+  public String getId() {
+    return id;
   }
 }

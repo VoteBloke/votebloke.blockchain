@@ -59,9 +59,10 @@ public class Elections extends Entry {
    *
    * @param inputEntries the entries that are passed to this Elections
    * @throws IllegalArgumentException if the inputEntries are different than null
+   * @return this Elections object
    */
   @Override
-  public final void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
+  public final Entry processEntry(List<Entry> inputEntries) throws IllegalArgumentException {
     if (inputEntries != null) {
       throw new IllegalArgumentException(
           "inputEntries needs to be null in new Elections(ArrayList<Entry> inputEntries");
@@ -77,6 +78,8 @@ public class Elections extends Entry {
                 + getTimeStamp()
                 + electionsQuestion
                 + Arrays.toString(answers));
+
+    return this;
   }
 
   /**
@@ -87,9 +90,10 @@ public class Elections extends Entry {
    * a Transaction objects.
    *
    * @throws IllegalArgumentException if the inputEntries are different than null
+   * @return this Elections object
    */
-  public final void processEntry() throws IllegalArgumentException {
-    processEntry(null);
+  public final Entry processEntry() throws IllegalArgumentException {
+    return (processEntry(null));
   }
 
   /**

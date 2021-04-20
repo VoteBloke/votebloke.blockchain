@@ -27,7 +27,7 @@ public class Tally extends Entry {
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
    */
-  public Tally(PublicKey teller, List<Object> inputEntries) throws IllegalArgumentException {
+  public Tally(PublicKey teller, List<Entry> inputEntries) throws IllegalArgumentException {
     super();
     this.teller = teller;
     setElections(inputEntries.get(0));
@@ -66,10 +66,11 @@ public class Tally extends Entry {
    *     Vote objects getting tallied in this Tally in the following positions
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
+   * @return
    */
   @Override
-  public final void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
-    processEntry(inputEntries.get(0), inputEntries.subList(1, inputEntries.size() - 1));
+  public final Entry processEntry(List<Entry> inputEntries) throws IllegalArgumentException {
+    return (processEntry(inputEntries.get(0), inputEntries.subList(1, inputEntries.size() - 1)));
   }
 
   /**
@@ -80,11 +81,11 @@ public class Tally extends Entry {
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
    */
-  public final void processEntry(Object elections, List<Object> votes)
+  public final Entry processEntry(Object elections, List<Entry> votes)
       throws IllegalArgumentException {
     setElections(elections);
     setVotes(votes);
-    processEntry();
+    return (processEntry());
   }
 
   /**
@@ -93,7 +94,7 @@ public class Tally extends Entry {
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
    */
-  public final void processEntry() throws RuntimeException {
+  public final Entry processEntry() throws RuntimeException {
     if (!elections.validateEntry()) {
       throw new RuntimeException(
           "Entry elections: "
@@ -117,6 +118,8 @@ public class Tally extends Entry {
       }
     }
     updateId();
+
+    return this;
   }
 
   /**
@@ -167,7 +170,7 @@ public class Tally extends Entry {
    *
    * @param entries the list of Entry objects
    */
-  public final void setVotes(List<Object> entries) {
+  public final void setVotes(List<Entry> entries) {
     ArrayList<Vote> newVotes = new ArrayList<>();
     for (Object entry : entries) {
       try {
