@@ -4,8 +4,6 @@ import java.security.PublicKey;
 
 /** A representation of the outputs of a Transaction object. */
 public class TransactionOutput {
-  /** The id of this Transaction. */
-  String id;
   /** The public key this TransactionOutput was addressed from. */
   PublicKey author;
   /** Data associated with this TransactionOutput. */

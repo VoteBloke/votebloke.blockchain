@@ -2,20 +2,29 @@ package blockchain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /** This is a Block class. Represents a single block in the blockchain. */
 public class Block {
+  private List<TransactionOutput> unconsumedOutputs;
+
   /**
    * Constructor for the Block class.
    *
    * @param previousHash the hash of the previous Block
    * @param blockVersion the version of this Block
    * @param miningDifficulty the mining difficulty of this Block
+   * @param unconsumedOutputs the pool of unconsumed TransactionOutputs
    */
-  public Block(String previousHash, String blockVersion, int miningDifficulty) {
+  public Block(
+      String previousHash,
+      String blockVersion,
+      int miningDifficulty,
+      List<TransactionOutput> unconsumedOutputs) {
     this.previousHash = previousHash;
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;
+    this.unconsumedOutputs = unconsumedOutputs;
 
     id = this.calculateId();
   }
