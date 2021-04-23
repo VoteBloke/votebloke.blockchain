@@ -111,18 +111,39 @@ public class Transaction {
   /**
    * Validates this Transactions.
    *
-   * @return true if the public ECDSA key of the signee matches the signature and the recalculated
-   *     hash matches the current hash of this Transaction; false otherwise
+   * <p>Validates following:
+   *
+   * <ul>
+   *   <li>if the public ECDSA key of the signee matches the signature
+   *   <li>the recalculated hash matches the current hash of this Transaction
+   *   <li>if the data inside this Transaction is valid
+   * </ul>
+   *
+   * @return true if this Transaction is a valid Transaction - can be added to a Block object; false
+   *     otherwise
    */
   public boolean validate() {
+    if (!verifySignature()) {
+      return false;
+    }
+
     String currentHash = this.id;
     calculateHash();
-    if (verifySignature() && Objects.equals(currentHash, this.id)) {
-      return true;
-    } else {
+    if (!Objects.equals(currentHash, this.id)) {
       this.id = currentHash;
       return false;
     }
+
+    try {
+      if (!data.validateEntry()) {
+        return false;
+      }
+      ;
+    } catch (Exception e) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
