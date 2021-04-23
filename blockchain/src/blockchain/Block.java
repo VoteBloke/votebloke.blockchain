@@ -6,29 +6,6 @@ import java.util.List;
 
 /** This is a Block class. Represents a single block in the blockchain. */
 public class Block {
-  private List<TransactionOutput> unconsumedOutputs;
-
-  /**
-   * Constructor for the Block class.
-   *
-   * @param previousHash the hash of the previous Block
-   * @param blockVersion the version of this Block
-   * @param miningDifficulty the mining difficulty of this Block
-   * @param unconsumedOutputs the pool of unconsumed TransactionOutputs
-   */
-  public Block(
-      String previousHash,
-      String blockVersion,
-      int miningDifficulty,
-      List<TransactionOutput> unconsumedOutputs) {
-    this.previousHash = previousHash;
-    this.blockVersion = blockVersion;
-    this.miningDifficulty = miningDifficulty;
-    this.unconsumedOutputs = unconsumedOutputs;
-
-    id = this.calculateId();
-  }
-
   /**
    * The id of this Block. ID of a Block is calculated based on the time stamp, previous hash and
    * block version.
@@ -64,6 +41,33 @@ public class Block {
   private final int miningDifficulty;
 
   /**
+   * The list of unconsumed TransactionOutputs. Those outputs were not yet used up by other
+   * Transactions.
+   */
+  private List<TransactionOutput> unconsumedOutputs;
+
+  /**
+   * Constructor for the Block class.
+   *
+   * @param previousHash the hash of the previous Block
+   * @param blockVersion the version of this Block
+   * @param miningDifficulty the mining difficulty of this Block
+   * @param unconsumedOutputs the pool of unconsumed TransactionOutputs
+   */
+  public Block(
+      String previousHash,
+      String blockVersion,
+      int miningDifficulty,
+      List<TransactionOutput> unconsumedOutputs) {
+    this.previousHash = previousHash;
+    this.blockVersion = blockVersion;
+    this.miningDifficulty = miningDifficulty;
+    this.unconsumedOutputs = unconsumedOutputs;
+
+    id = this.calculateId();
+  }
+
+  /**
    * toString override.
    *
    * @return the text representation of this Block.
@@ -71,33 +75,6 @@ public class Block {
   @Override
   public String toString() {
     return ("Block. ID: " + this.id + " date: " + timeStamp + " version: " + blockVersion);
-  }
-
-  /**
-   * timeStamp getter.
-   *
-   * @return a Date object with the date of creation of this Block.
-   */
-  public Date getTimeStamp() {
-    return this.timeStamp;
-  }
-
-  /**
-   * ID getter.
-   *
-   * @return this Block's ID
-   */
-  public String getId() {
-    return this.id;
-  }
-
-  /**
-   * Hash getter.
-   *
-   * @return this Block's mined hash
-   */
-  public String getHash() {
-    return this.hash;
   }
 
   /**
@@ -161,5 +138,50 @@ public class Block {
     }
 
     return true;
+  }
+
+  /**
+   * timeStamp getter.
+   *
+   * @return a Date object with the date of creation of this Block.
+   */
+  public Date getTimeStamp() {
+    return this.timeStamp;
+  }
+
+  /**
+   * ID getter.
+   *
+   * @return this Block's ID
+   */
+  public String getId() {
+    return this.id;
+  }
+
+  /**
+   * Hash getter.
+   *
+   * @return this Block's mined hash
+   */
+  public String getHash() {
+    return this.hash;
+  }
+
+  /**
+   * Getter of unconsumed outputs of this Transaction.
+   *
+   * @return the unconcumed TransactionOutputs of this Block
+   */
+  public List<TransactionOutput> getUnconsumedOutputs() {
+    return unconsumedOutputs;
+  }
+
+  /**
+   * Setter of unconsumed outputs of this Transaction.
+   *
+   * @param unconsumedOutputs the list of the unconsumed TransactionOutputs
+   */
+  public void setUnconsumedOutputs(List<TransactionOutput> unconsumedOutputs) {
+    this.unconsumedOutputs = unconsumedOutputs;
   }
 }
