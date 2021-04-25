@@ -43,7 +43,7 @@ public class Block {
   /**
    * The list of unconsumed TransactionOutputs. Those outputs were not yet used up by Transactions.
    */
-  private List<TransactionOutput> unconsumedOutputs = new ArrayList<>();
+  private List<TransactionOutput> unconsumedOutputs;
 
   /**
    * Constructor for the Block class.
@@ -92,9 +92,7 @@ public class Block {
     }
 
     transaction.inputs.forEach(
-        transactionInput -> {
-          unconsumedOutputs.remove(transactionInput.transactionOut);
-        });
+        transactionInput -> unconsumedOutputs.remove(transactionInput.transactionOut));
     unconsumedOutputs.addAll(transaction.processTransaction());
 
     if (transaction.validate()) {
