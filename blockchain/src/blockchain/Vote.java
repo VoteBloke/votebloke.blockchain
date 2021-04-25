@@ -82,7 +82,8 @@ public class Vote extends Entry {
    * @return this Vote object
    */
   @Override
-  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries) throws IllegalArgumentException {
+  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+      throws IllegalArgumentException {
     if (inputEntries.size() != 1) {
       throw new IllegalArgumentException("inputEntries must be of length 1 in new Vote(...)");
     }
@@ -116,9 +117,7 @@ public class Vote extends Entry {
         StringUtils.hashString(
             StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp());
 
-    return new ArrayList<TransactionOutput>(
-
-    );
+    return new ArrayList<TransactionOutput>();
   }
 
   public final List<TransactionOutput> processEntry(TransactionInput inputElections) {
@@ -126,8 +125,11 @@ public class Vote extends Entry {
   }
 
   public final List<TransactionOutput> processEntry() {
-    return (processEntry(new ArrayList<TransactionInput>(List.of(
-            new TransactionInput(new TransactionOutput(elections.getElectionsCaller(), elections))))));
+    return (processEntry(
+        new ArrayList<TransactionInput>(
+            List.of(
+                new TransactionInput(
+                    new TransactionOutput(elections.getElectionsCaller(), elections))))));
   }
 
   /**

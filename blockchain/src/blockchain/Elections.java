@@ -63,7 +63,8 @@ public class Elections extends Entry {
    * @return this Elections object
    */
   @Override
-  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries) throws IllegalArgumentException {
+  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+      throws IllegalArgumentException {
     if (inputEntries != null) {
       throw new IllegalArgumentException(
           "inputEntries needs to be null in new Elections(ArrayList<Entry> inputEntries");
