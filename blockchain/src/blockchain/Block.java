@@ -207,6 +207,32 @@ public class Block {
   }
 
   /**
+   * Returns entries authored by the provided public key.
+   *
+   * <p>Searches through the unconsumed TransactionOutput objects stored in this Block and returns
+   * those authored by the provided ECDSA key.
+   *
+   * @param author the public ECDSA key of the agent who authored the Entry objects looked for in
+   *     this method
+   * @param selectedClass the fully specified class name of objects included in the return value
+   * @return the array of the Entry objects authored by the provided public key and of type
+   *     specified by selectedClass
+   */
+  public <T extends Entry> List<TransactionOutput> authoredBy(
+      PublicKey author, Class<T> selectedClass) {
+    List<TransactionOutput> outputs = new ArrayList<>();
+    unconsumedOutputs.forEach(
+        transactionOutput -> {
+          if (transactionOutput.isAddressedFrom(author)
+              && selectedClass.isInstance(transactionOutput.data)) {
+            outputs.add(transactionOutput);
+          }
+        });
+
+    return outputs;
+  }
+
+  /**
    * Returns active Elections in this Block.
    *
    * @param caller the public ECDSA key of the agent who authored the returned Elections objects. If
