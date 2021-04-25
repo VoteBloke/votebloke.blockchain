@@ -12,7 +12,7 @@ class ChainTest {
 
   @BeforeEach
   void setUp() {
-    Block genesisBlock = new Block("0", "v1", 0);
+    Block genesisBlock = new Block("0", "v1", 0, null);
     genesisBlock.mineHash();
     blockchain = new Chain(genesisBlock);
   }
@@ -26,7 +26,7 @@ class ChainTest {
   @Test
   void isChainValid_WrongPreviousHash() {
     // Chain with a block with a wrong previousHash is not valid
-    Block newBlock = new Block("something", "v1", 0);
+    Block newBlock = new Block("something", "v1", 0, null);
     newBlock.mineHash();
     blockchain.addBlock(newBlock);
     assertFalse(blockchain.isChainValid());
@@ -36,7 +36,7 @@ class ChainTest {
   void addBlock_InvalidBlocksNotAdded() {
     // Invalid blocks are not added to the Chain
     int oldLength = blockchain.size();
-    Block invalidBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0);
+    Block invalidBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0, null);
     assertFalse(blockchain.addBlock(invalidBlock));
     assertEquals(oldLength, blockchain.size());
   }
@@ -44,7 +44,7 @@ class ChainTest {
   @Test
   void addBlock_ReturnsTrueIfAdded() {
     // addBlock returns true if the block is added and chain length is incremented
-    Block validBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0);
+    Block validBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0, null);
     validBlock.mineHash();
     assertTrue(blockchain.addBlock(validBlock));
   }
@@ -52,7 +52,7 @@ class ChainTest {
   @Test
   void addBlock_UpdatesLatestHash() {
     // addBlock updates the latestHash field
-    Block newBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0);
+    Block newBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0, null);
     newBlock.mineHash();
     blockchain.addBlock(newBlock);
     assertEquals(newBlock.getHash(), blockchain.getLatestBlockHash());
@@ -61,7 +61,7 @@ class ChainTest {
   @Test
   void addBlock_IncrementsChainLength() {
     // addBlock increments the chain length
-    Block newBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0);
+    Block newBlock = new Block(blockchain.getLatestBlockHash(), "v1", 0, null);
     newBlock.mineHash();
     int oldSize = blockchain.size();
     blockchain.addBlock(newBlock);

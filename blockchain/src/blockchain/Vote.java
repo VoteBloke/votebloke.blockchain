@@ -1,6 +1,7 @@
 package blockchain;
 
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -81,13 +82,13 @@ public class Vote extends Entry {
    * @return this Vote object
    */
   @Override
-  public final Entry processEntry(List<Entry> inputEntries) throws IllegalArgumentException {
+  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries) throws IllegalArgumentException {
     if (inputEntries.size() != 1) {
       throw new IllegalArgumentException("inputEntries must be of length 1 in new Vote(...)");
     }
 
-    if (inputEntries.get(0) instanceof Elections) {
-      this.elections = (Elections) inputEntries.get(0);
+    if (inputEntries.get(0).transactionOut.data instanceof Elections) {
+      this.elections = (Elections) inputEntries.get(0).transactionOut.data;
     } else {
       throw new IllegalArgumentException("Vote needs Elections to processEntry");
     }
@@ -115,15 +116,18 @@ public class Vote extends Entry {
         StringUtils.hashString(
             StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp());
 
-    return this;
+    return new ArrayList<TransactionOutput>(
+
+    );
   }
 
-  public final Entry processEntry(Elections elections) {
-    return (processEntry(Collections.singletonList(elections)));
+  public final List<TransactionOutput> processEntry(TransactionInput inputElections) {
+    return processEntry(new ArrayList<>(List.of(inputElections)));
   }
 
-  public final Entry processEntry() {
-    return (processEntry(Collections.singletonList(elections)));
+  public final List<TransactionOutput> processEntry() {
+    return (processEntry(new ArrayList<TransactionInput>(List.of(
+            new TransactionInput(new TransactionOutput(elections.getElectionsCaller(), elections))))));
   }
 
   /**

@@ -69,8 +69,12 @@ public class Tally extends Entry {
    * @return
    */
   @Override
-  public final Entry processEntry(List<Entry> inputEntries) throws IllegalArgumentException {
-    return (processEntry(inputEntries.get(0), inputEntries.subList(1, inputEntries.size() - 1)));
+  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries) throws IllegalArgumentException {
+    ArrayList<Entry> votes = new ArrayList<>();
+    for(TransactionInput transactionInput : inputEntries.subList(1, inputEntries.size() - 1)) {
+      votes.add(transactionInput.transactionOut.data);
+    }
+    return (processEntry(inputEntries.get(0).transactionOut, votes));
   }
 
   /**
@@ -80,8 +84,9 @@ public class Tally extends Entry {
    * @param votes the list of Vote objects to tally
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
+   * @return
    */
-  public final Entry processEntry(Object elections, List<Entry> votes)
+  public final ArrayList<TransactionOutput> processEntry(Object elections, List<Entry> votes)
       throws IllegalArgumentException {
     setElections(elections);
     setVotes(votes);
@@ -93,8 +98,9 @@ public class Tally extends Entry {
    *
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
+   * @return
    */
-  public final Entry processEntry() throws RuntimeException {
+  public final ArrayList<TransactionOutput> processEntry() throws RuntimeException {
     if (!elections.validateEntry()) {
       throw new RuntimeException(
           "Entry elections: "
@@ -119,7 +125,7 @@ public class Tally extends Entry {
     }
     updateId();
 
-    return this;
+    return new ArrayList<TransactionOutput>(List.of(new TransactionOutput(teller, this)));
   }
 
   /**
