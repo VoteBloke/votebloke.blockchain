@@ -1,5 +1,6 @@
 package blockchain;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Block {
   private final String previousHash;
 
   /** The Transactions added to this Block. */
-  private ArrayList<Transaction> transactions = new ArrayList<>();
+  private List<Transaction> transactions = new ArrayList<>();
 
   /** The time stamp of the creation of this Block. */
   private final Date timeStamp = new Date(System.currentTimeMillis());
@@ -30,7 +31,6 @@ public class Block {
   /** The nonce of this Block. */
   private int nonce = 0;
 
-  private String merkleRoot;
   /** The version of this Block. */
   private final String blockVersion;
 
@@ -41,10 +41,9 @@ public class Block {
   private final int miningDifficulty;
 
   /**
-   * The list of unconsumed TransactionOutputs. Those outputs were not yet used up by other
-   * Transactions.
+   * The list of unconsumed TransactionOutputs. Those outputs were not yet used up by Transactions.
    */
-  private List<TransactionOutput> unconsumedOutputs;
+  private List<TransactionOutput> unconsumedOutputs = new ArrayList<>();
 
   /**
    * Constructor for the Block class.
@@ -80,16 +79,27 @@ public class Block {
   /**
    * Adds a Transaction to this Block.
    *
+   * <p>Performs processing and validation of the passed Transaction object. Updates the pool of
+   * available, unconsumed TransactionOutput objects in this Block.
+   *
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
+    for (TransactionInput inputTransaction : transaction.inputs) {
+      if (!unconsumedOutputs.contains(inputTransaction.transactionOut)) {
+        return;
+      }
+    }
+
+    transaction.inputs.forEach(
+        transactionInput -> {
+          unconsumedOutputs.remove(transactionInput.transactionOut);
+        });
+    unconsumedOutputs.addAll(transaction.processTransaction());
+
     if (transaction.validate()) {
       this.transactions.add(transaction);
     }
-  }
-
-  private String getHeader() {
-    return this.timeStamp + this.blockVersion + this.previousHash;
   }
 
   /**
@@ -170,18 +180,55 @@ public class Block {
   /**
    * Getter of unconsumed outputs of this Transaction.
    *
-   * @return the unconcumed TransactionOutputs of this Block
+   * @return the unconsumed TransactionOutputs of this Block
    */
   public List<TransactionOutput> getUnconsumedOutputs() {
     return unconsumedOutputs;
   }
 
   /**
-   * Setter of unconsumed outputs of this Transaction.
+   * Returns entries authored by the provided public key.
    *
-   * @param unconsumedOutputs the list of the unconsumed TransactionOutputs
+   * <p>Searches through the unconsumed TransactionOutput objects stored in this Block and returns
+   * those authored by the provided ECDSA key.
+   *
+   * @param author the public ECDSA key of the agent who authored the Entry objects looked for in
+   *     this method
+   * @return the array of the Entry objects authored by the provided public key
    */
-  public void setUnconsumedOutputs(List<TransactionOutput> unconsumedOutputs) {
-    this.unconsumedOutputs = unconsumedOutputs;
+  public List<TransactionOutput> authoredBy(PublicKey author) {
+    List<TransactionOutput> outputs = new ArrayList<>();
+    unconsumedOutputs.forEach(
+        transactionOutput -> {
+          if (transactionOutput.isAddressedFrom(author)) {
+            outputs.add(transactionOutput);
+          }
+        });
+
+    return outputs;
+  }
+
+  /**
+   * Returns active Elections in this Block.
+   *
+   * @param caller the public ECDSA key of the agent who authored the returned Elections objects. If
+   *     null returns all active Elections
+   * @return the list of active Elections objects authored by the caller
+   */
+  public List<Elections> getOpenElections(PublicKey caller) {
+    ArrayList<Elections> activeElections = new ArrayList<>();
+    unconsumedOutputs.forEach(
+        transactionOutput -> {
+          if (transactionOutput.data instanceof Elections
+              && (caller == null || transactionOutput.isAddressedFrom(caller))) {
+            activeElections.add((Elections) transactionOutput.data);
+          }
+        });
+
+    return activeElections;
+  }
+
+  private String getHeader() {
+    return this.timeStamp + this.blockVersion + this.previousHash;
   }
 }

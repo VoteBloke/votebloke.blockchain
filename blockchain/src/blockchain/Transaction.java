@@ -61,8 +61,16 @@ public class Transaction {
       inputEntries.add(inputTransaction.transactionOut.data);
     }
 
-    data.processEntry(inputEntries);
-    calculateHash();
+    try {
+      data.processEntry(inputEntries);
+      calculateHash();
+    } catch (Exception e) {
+      ArrayList<TransactionOutput> unchangedOutputs = new ArrayList<>();
+      for (TransactionInput inputTransaction : inputs) {
+        unchangedOutputs.add(inputTransaction.transactionOut);
+      }
+      return unchangedOutputs;
+    }
     ArrayList<TransactionOutput> updatedOutputs = new ArrayList<>();
     updatedOutputs.add(new TransactionOutput(signee, data, getId()));
 
