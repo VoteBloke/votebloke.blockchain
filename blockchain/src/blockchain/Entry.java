@@ -12,7 +12,7 @@ public abstract class Entry extends Object {
     this.timeStamp = new Date(System.currentTimeMillis());
   }
 
-  public abstract Entry processEntry(List<Entry> inputEntries) throws IllegalArgumentException;
+  public abstract List<TransactionOutput> processEntry(List<TransactionInput> inputEntries) throws IllegalArgumentException;
 
   public abstract boolean validateEntry();
 

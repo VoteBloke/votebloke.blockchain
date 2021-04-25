@@ -55,14 +55,9 @@ public class Transaction {
    *     inputs
    */
   public List<TransactionOutput> processTransaction() {
-    ArrayList<Entry> inputEntries = new ArrayList<>();
-
-    for (TransactionInput inputTransaction : inputs) {
-      inputEntries.add(inputTransaction.transactionOut.data);
-    }
-
+    List<TransactionOutput> outputs;
     try {
-      data.processEntry(inputEntries);
+      outputs = data.processEntry(inputs);
       calculateHash();
     } catch (Exception e) {
       ArrayList<TransactionOutput> unchangedOutputs = new ArrayList<>();
@@ -71,10 +66,9 @@ public class Transaction {
       }
       return unchangedOutputs;
     }
-    ArrayList<TransactionOutput> updatedOutputs = new ArrayList<>();
-    updatedOutputs.add(new TransactionOutput(signee, data, getId()));
+    outputs.add(new TransactionOutput(signee, data, getId()));
 
-    return updatedOutputs;
+    return outputs;
   }
 
   /**

@@ -17,7 +17,15 @@ public class TransactionOutput {
     this.parentTransactionId = parentTransactionId;
   }
 
+  TransactionOutput(PublicKey author, Entry data) {
+    this(author, data, null);
+  }
+
   boolean isAddressedFrom(PublicKey key) {
     return key == author;
+  }
+
+  public void setParentTransactionId(String parentTransactionId) {
+    this.parentTransactionId = parentTransactionId;
   }
 }
