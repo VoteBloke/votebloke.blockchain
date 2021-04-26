@@ -1,6 +1,7 @@
 package blockchain;
 
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,9 +60,11 @@ public class Elections extends Entry {
    *
    * @param inputEntries the entries that are passed to this Elections
    * @throws IllegalArgumentException if the inputEntries are different than null
+   * @return this Elections object
    */
   @Override
-  public final void processEntry(List<Object> inputEntries) throws IllegalArgumentException {
+  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+      throws IllegalArgumentException {
     if (inputEntries != null) {
       throw new IllegalArgumentException(
           "inputEntries needs to be null in new Elections(ArrayList<Entry> inputEntries");
@@ -77,6 +80,8 @@ public class Elections extends Entry {
                 + getTimeStamp()
                 + electionsQuestion
                 + Arrays.toString(answers));
+
+    return new ArrayList<>(List.of(new TransactionOutput(electionCaller, this)));
   }
 
   /**
@@ -86,10 +91,11 @@ public class Elections extends Entry {
    * <p>Elections must have null input entries. Elections should be processed before adding them to
    * a Transaction objects.
    *
+   * @return this Elections object
    * @throws IllegalArgumentException if the inputEntries are different than null
    */
-  public final void processEntry() throws IllegalArgumentException {
-    processEntry(null);
+  public final List<TransactionOutput> processEntry() throws IllegalArgumentException {
+    return (processEntry(null));
   }
 
   /**
