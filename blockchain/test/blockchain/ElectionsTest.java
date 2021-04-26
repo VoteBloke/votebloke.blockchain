@@ -108,20 +108,14 @@ public class ElectionsTest {
 
   @Test
   public void electionsProcessEntryAnswersAndQuestionSet() {
-    assertDoesNotThrow(
-        () -> {
-          electionsFull.processEntry(null);
-        });
+    assertDoesNotThrow(() -> electionsFull.processEntry(null));
     assertNotNull(electionsFull.getId());
     assertEquals(64, electionsFull.getId().length());
   }
 
   @Test
   public void electionsProcessEntryNoArgumentsOverload() {
-    assertDoesNotThrow(
-        () -> {
-          electionsFull.processEntry();
-        });
+    assertDoesNotThrow(() -> electionsFull.processEntry());
   }
 
   @Test
@@ -153,5 +147,10 @@ public class ElectionsTest {
     assertEquals(1, processedEntry.size());
     assertEquals(electionsFull, processedEntry.get(0).data);
     assertEquals(author, processedEntry.get(0).author);
+  }
+
+  @Test
+  public void electionsToString() {
+    assertEquals("Elections: null\nQuestion:\nAnswers: []", elections.toString());
   }
 }
