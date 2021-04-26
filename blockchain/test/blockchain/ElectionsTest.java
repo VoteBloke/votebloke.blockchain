@@ -18,7 +18,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 public class ElectionsTest {
   PublicKey author;
 
@@ -50,16 +49,9 @@ public class ElectionsTest {
 
   @Test
   public void electionsIllegalArgumentWhenNullInConstructor() {
+    assertThrows(IllegalArgumentException.class, () -> new Elections(author, null));
     assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          new Elections(author, null);
-        });
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          new Elections(author, "question test", null);
-        });
+        IllegalArgumentException.class, () -> new Elections(author, "question test", null));
   }
 
   @Test
@@ -86,31 +78,22 @@ public class ElectionsTest {
 
   @Test
   public void electionsSetQuestionIllegalArgExceptionWhenNull() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          elections.setQuestion(null);
-        });
+    assertThrows(IllegalArgumentException.class, () -> elections.setQuestion(null));
   }
 
   @Test
   public void electionsSetAnswersIllegalArgExceptionWhenNull() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          elections.setAnswers(null);
-        });
+    assertThrows(IllegalArgumentException.class, () -> elections.setAnswers(null));
   }
 
   @Test
   public void electionsIllegalArgumentWhenNotNullInProcessEntry() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> {
-          elections.processEntry(
-              new ArrayList<TransactionInput>(
-                  List.of(new TransactionInput(new TransactionOutput(author, elections)))));
-        });
+        () ->
+            elections.processEntry(
+                new ArrayList<>(
+                    List.of(new TransactionInput(new TransactionOutput(author, elections))))));
   }
 
   @Test
