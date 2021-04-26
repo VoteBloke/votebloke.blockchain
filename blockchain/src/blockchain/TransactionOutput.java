@@ -4,22 +4,28 @@ import java.security.PublicKey;
 
 /** A representation of the outputs of a Transaction object. */
 public class TransactionOutput {
-  /** The id of this Transaction. */
-  String id;
-  /** The public key this TransactionOutput was addressed to. */
-  PublicKey recipient;
+  /** The public key this TransactionOutput was addressed from. */
+  PublicKey author;
   /** Data associated with this TransactionOutput. */
   Entry data;
   /** The id of the Transaction object, which created this TransactionOutput. */
   String parentTransactionId;
 
-  TransactionOutput(PublicKey recipient, Entry data, String parentTransactionId) {
-    this.recipient = recipient;
+  TransactionOutput(PublicKey author, Entry data, String parentTransactionId) {
+    this.author = author;
     this.data = data;
     this.parentTransactionId = parentTransactionId;
   }
 
-  boolean isAddressedTo(PublicKey key) {
-    return key == recipient;
+  TransactionOutput(PublicKey author, Entry data) {
+    this(author, data, null);
+  }
+
+  boolean isAddressedFrom(PublicKey key) {
+    return key == author;
+  }
+
+  public void setParentTransactionId(String parentTransactionId) {
+    this.parentTransactionId = parentTransactionId;
   }
 }

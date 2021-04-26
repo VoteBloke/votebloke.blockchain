@@ -9,7 +9,7 @@ class BlockTest {
 
   @BeforeEach
   void setUp() {
-    block = new Block("0", "v1", 0);
+    block = new Block("0", "v1", 0, null);
   }
 
   @Test
