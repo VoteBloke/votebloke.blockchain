@@ -252,6 +252,10 @@ public class Block {
     return activeElections;
   }
 
+  public final String getPreviousHash() {
+    return this.previousHash;
+  }
+
   private String getHeader() {
     return this.timeStamp + this.blockVersion + this.previousHash;
   }
