@@ -10,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
+import java.util.ArrayList;
 
 /** A representation of a single agent. */
 public class Account {
@@ -46,6 +47,7 @@ public class Account {
 
   /**
    * Exports the private and public key of this Account to files in the provided directory.
+   *
    * @param dir the directory that will hold the files with the private and the public key
    * @throws IOException when writing to files failed
    */
@@ -101,6 +103,25 @@ public class Account {
     electionTransaction.sign(getPrivateKey());
 
     return electionTransaction;
+  }
+
+  /**
+   * This Account votes in elections.
+   *
+   * @param answer the answer of this Account to the elections
+   * @param elections the Elections
+   * @param inputTransactions the array that contains the Transaction object with the elections.
+   *     Must be of length 1.
+   * @return the processed and signed Transaction with a vote
+   */
+  public Transaction vote(
+      String answer, Elections elections, ArrayList<TransactionInput> inputTransactions) {
+    Vote vote = new Vote(getPublicKey(), elections, answer);
+    Transaction voteTransaction = new Transaction(getPublicKey(), vote, inputTransactions);
+    voteTransaction.processTransaction();
+    voteTransaction.sign(getPrivateKey());
+
+    return voteTransaction;
   }
 
   private PrivateKey getPrivateKey() {

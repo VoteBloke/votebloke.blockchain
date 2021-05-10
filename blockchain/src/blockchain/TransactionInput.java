@@ -8,4 +8,8 @@ public class TransactionInput {
   TransactionInput(TransactionOutput transactionOut) {
     this.transactionOut = transactionOut;
   }
+
+  TransactionInput(Transaction transaction) {
+    this.transactionOut = new TransactionOutput(transaction);
+  }
 }

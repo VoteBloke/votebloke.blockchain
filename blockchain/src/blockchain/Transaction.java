@@ -52,7 +52,7 @@ public class Transaction {
 
   /**
    * Processes this Transaction. Sets up the Entry object of this Transaction and calculates the
-   * hash of this Transaction.
+   * hash of this Transaction. Creates the TransactionOutput object associated with this Transaction.
    *
    * @return the list of outputs corresponding to: this Transaction and unconsumed Transaction from
    *     inputs
