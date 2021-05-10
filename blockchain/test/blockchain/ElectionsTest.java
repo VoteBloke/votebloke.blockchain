@@ -34,7 +34,7 @@ public class ElectionsTest {
   }
 
   @Test
-  public void electionsNullIdIfNotProcessed() {
+  public void electionsNullIdIfNotProcessed() throws NoSuchAlgorithmException {
     assertEquals(null, elections.getId());
   }
 }

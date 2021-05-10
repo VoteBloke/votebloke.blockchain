@@ -1,31 +1,31 @@
 package blockchain;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 
 public class AccountTest {
     Account ac;
     Block block;
 
     @BeforeEach
-    void setup() throws NoSuchAlgorithmException, IOException {
+    void setup() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         ac = Account.createAccount();
-        block = new Block("0", "v1", 0);
+        block = new Block("0", "v1", 0, null);
     }
 
     @Test
-    boolean doKeysMatch() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        return ac.validatePrivate(ac.getPrivateKey());
+    void createElectionsTestReturnsValidTransaction() {
+        Transaction electionsTransaction = ac.createElections("test question", new String [] {"answer1", "answer2"});
+        Assertions.assertTrue(electionsTransaction.validate());
     }
 
     @Test
-    void startElections() {
-        String[] opts = {"ledwo", "nie da sie"};
-        ac.createElections("jak zyc...", opts);
+    void createElectionsTestAddingToBlockDoesNotThrow() {
+        Transaction electionsTransaction = ac.createElections("test question", new String [] {"answer1", "answer2"});
+        Assertions.assertDoesNotThrow(() -> block.addTransaction(electionsTransaction));
     }
 }

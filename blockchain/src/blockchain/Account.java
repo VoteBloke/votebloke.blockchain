@@ -3,7 +3,7 @@ package blockchain;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.security.spec.ECGenParameterSpec;
 
 /** A representation of a single agent. */
 public class Account {
@@ -23,19 +23,18 @@ public class Account {
     this.privateKey = privateKey;
   }
 
-  public static KeyPair generateKeys() throws NoSuchAlgorithmException {
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
-    kpg.initialize(2048);
-
+  public static KeyPair generateKeys()
+      throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC");
+    kpg.initialize(new ECGenParameterSpec("secp256r1"), new SecureRandom());
     return kpg.generateKeyPair();
   }
 
-  private void exportKeys(String dir) throws IOException {
-
+  public void exportKeys(String dir) throws IOException {
     FileOutputStream out;
 
     out = new FileOutputStream(dir + ".key");
-    out.write(privateKey.getEncoded());
+    out.write(getPrivateKey().getEncoded());
     out.close();
 
     out = new FileOutputStream(dir + ".pub");
@@ -43,34 +42,18 @@ public class Account {
     out.close();
   }
 
-  public static Account createAccount() throws NoSuchAlgorithmException, IOException {
+  /**
+   * Creates a new Account object.
+   *
+   * @return a new Account object with a private and public ECDSA keys
+   * @throws NoSuchAlgorithmException if no ECDSA algorithm is found on the client
+   * @throws InvalidAlgorithmParameterException if the spec of the encryption algorithm 'secp256r1'
+   *     is not found on the client
+   */
+  public static Account createAccount()
+      throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
     KeyPair newKeys = generateKeys();
-
-    Account ret  = new Account(newKeys.getPublic(), newKeys.getPrivate());
-    // Save created keys in working directory
-
-    ret.exportKeys("./testStorage/key");
-
-    return  ret;
-
-  }
-
-  public boolean validatePrivate(PrivateKey priv) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-
-    byte[] chall = new byte[10000];
-    ThreadLocalRandom.current().nextBytes(chall);
-
-    Signature sig = Signature.getInstance("SHA256withRSA");
-    sig.initSign(priv);
-    sig.update(chall);
-    byte[] signature = sig.sign();
-
-    //verify
-    sig.initVerify(publicKey);
-    sig.update(chall);
-
-
-    return sig.verify(signature);
+    return new Account(newKeys.getPublic(), newKeys.getPrivate());
   }
 
   /**
@@ -82,12 +65,26 @@ public class Account {
     return publicKey;
   }
 
-  public PrivateKey getPrivateKey() {
-    // remove for production!!!
-    return privateKey;
+  /**
+   * This Account calls elections.
+   *
+   * <p>Creates a new Transaction object with an Elections inside of it. Processes the Transaction
+   * and signs it.
+   *
+   * @param question a question to ask during elections
+   * @param answers an array of possible answers to elections
+   * @return a processed and signed Transaction object; ready to be added to a Block object
+   */
+  public Transaction createElections(String question, String[] answers) {
+    Elections elections = new Elections(getPublicKey(), question, answers);
+    Transaction electionTransaction = new Transaction(getPublicKey(), elections, null);
+    electionTransaction.processTransaction();
+    electionTransaction.sign(getPrivateKey());
+
+    return electionTransaction;
   }
 
-  public Elections createElections(String question, String [] options) {
-    return new Elections(publicKey, question, options);
+  private PrivateKey getPrivateKey() {
+    return privateKey;
   }
 }
