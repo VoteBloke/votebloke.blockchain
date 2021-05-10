@@ -33,7 +33,7 @@ public class Transaction {
   /** The time stamp of creation of this Transaction. */
   private final Date timeStamp;
 
-  /** The outputs from this Transaction */
+  /** The outputs from this Transaction. */
   public List<TransactionOutput> outputs;
 
   /**

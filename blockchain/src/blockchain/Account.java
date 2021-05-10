@@ -2,7 +2,13 @@ package blockchain;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
 
 /** A representation of a single agent. */
@@ -23,6 +29,14 @@ public class Account {
     this.privateKey = privateKey;
   }
 
+  /**
+   * Generates a private and public key pair using an elliptic curve algorithm (256 bits size).
+   *
+   * @return the generated KeyPair
+   * @throws NoSuchAlgorithmException if no ECDSA algorithm is found on the client
+   * @throws InvalidAlgorithmParameterException if the spec of the encryption algorithm 'secp256r1'
+   *     is not found on the client
+   */
   public static KeyPair generateKeys()
       throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
     KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC");
@@ -30,6 +44,11 @@ public class Account {
     return kpg.generateKeyPair();
   }
 
+  /**
+   * Exports the private and public key of this Account to files in the provided directory.
+   * @param dir the directory that will hold the files with the private and the public key
+   * @throws IOException when writing to files failed
+   */
   public void exportKeys(String dir) throws IOException {
     FileOutputStream out;
 
