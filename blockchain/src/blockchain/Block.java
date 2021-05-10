@@ -61,8 +61,11 @@ public class Block {
     this.previousHash = previousHash;
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;
-    this.unconsumedOutputs = unconsumedOutputs;
-
+    if (unconsumedOutputs == null) {
+      this.unconsumedOutputs = new ArrayList<>();
+    } else {
+      this.unconsumedOutputs = unconsumedOutputs;
+    }
     id = this.calculateId();
   }
 
@@ -85,15 +88,17 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
-    for (TransactionInput inputTransaction : transaction.inputs) {
-      if (!unconsumedOutputs.contains(inputTransaction.transactionOut)) {
-        return;
+    if (transaction.inputs != null) {
+      for (TransactionInput inputTransaction : transaction.inputs) {
+        if (!unconsumedOutputs.contains(inputTransaction.transactionOut)) {
+          return;
+        }
       }
-    }
 
-    transaction.inputs.forEach(
-        transactionInput -> unconsumedOutputs.remove(transactionInput.transactionOut));
-    unconsumedOutputs.addAll(transaction.processTransaction());
+      transaction.inputs.forEach(
+          transactionInput -> unconsumedOutputs.remove(transactionInput.transactionOut));
+    }
+    unconsumedOutputs.addAll(transaction.outputs);
 
     if (transaction.validate()) {
       this.transactions.add(transaction);

@@ -116,7 +116,7 @@ public class Vote extends Entry {
         StringUtils.hashString(
             StringUtils.keyToString(voter) + elections.getId() + answer + getTimeStamp());
 
-    return new ArrayList<TransactionOutput>();
+    return new ArrayList<>(List.of(inputEntries.get(0).transactionOut));
   }
 
   /**

@@ -21,6 +21,10 @@ public class TransactionOutput {
     this(author, data, null);
   }
 
+  public TransactionOutput(Transaction transaction) {
+    this(transaction.signee, transaction.data, transaction.getId());
+  }
+
   boolean isAddressedFrom(PublicKey key) {
     return key == author;
   }

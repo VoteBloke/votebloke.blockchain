@@ -49,7 +49,7 @@ class StringUtils {
     byte[] encryptedData;
 
     try {
-      Signature dsa = Signature.getInstance("ECDSA", "BC");
+      Signature dsa = Signature.getInstance("SHA256withECDSA");
       dsa.initSign(privateKey);
       dsa.update(data.getBytes());
       encryptedData = dsa.sign();
@@ -70,7 +70,7 @@ class StringUtils {
    */
   public static boolean verifyEcdsa(PublicKey key, String data, byte[] signature) {
     try {
-      Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
+      Signature ecdsaVerify = Signature.getInstance("SHA256withECDSA");
       ecdsaVerify.initVerify(key);
       ecdsaVerify.update(data.getBytes());
       return ecdsaVerify.verify(signature);
