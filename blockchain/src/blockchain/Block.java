@@ -83,7 +83,8 @@ public class Block {
    * Adds a Transaction to this Block.
    *
    * <p>Performs processing and validation of the passed Transaction object. Updates the pool of
-   * available, unconsumed TransactionOutput objects in this Block.
+   * available, unconsumed TransactionOutput objects in this Block by removing the input
+   * Transactions consumed by the transaction and adding the outputs of the transaction.
    *
    * @param transaction the transaction to be added
    */
@@ -185,7 +186,7 @@ public class Block {
    *
    * @return the unconsumed TransactionOutputs of this Block
    */
-  public List<TransactionOutput> getUnconsumedOutputs() {
+  public ArrayList<TransactionOutput> getUnconsumedOutputs() {
     return unconsumedOutputs;
   }
 

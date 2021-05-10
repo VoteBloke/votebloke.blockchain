@@ -5,11 +5,11 @@ public class TransactionInput {
   /** The TransactionOutput object behind this TransactionInput. */
   TransactionOutput transactionOut;
 
-  TransactionInput(TransactionOutput transactionOut) {
+  public TransactionInput(TransactionOutput transactionOut) {
     this.transactionOut = transactionOut;
   }
 
-  TransactionInput(Transaction transaction) {
+  public TransactionInput(Transaction transaction) {
     this.transactionOut = new TransactionOutput(transaction);
   }
 }

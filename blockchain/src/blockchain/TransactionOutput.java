@@ -32,4 +32,12 @@ public class TransactionOutput {
   public void setParentTransactionId(String parentTransactionId) {
     this.parentTransactionId = parentTransactionId;
   }
+
+  public String getParentTransactionId() {
+    return this.parentTransactionId;
+  }
+
+  public Entry getData() {
+    return this.data;
+  }
 }
