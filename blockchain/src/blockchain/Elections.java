@@ -81,7 +81,7 @@ public class Elections extends Entry {
                 + electionsQuestion
                 + Arrays.toString(answers));
 
-    return new ArrayList<>(List.of(new TransactionOutput(electionCaller, this)));
+    return new ArrayList<>();
   }
 
   /**

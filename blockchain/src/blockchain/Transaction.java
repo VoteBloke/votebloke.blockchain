@@ -33,6 +33,9 @@ public class Transaction {
   /** The time stamp of creation of this Transaction. */
   private final Date timeStamp;
 
+  /** The outputs from this Transaction. */
+  public List<TransactionOutput> outputs;
+
   /**
    * A constructor for Transaction.
    *
@@ -48,8 +51,9 @@ public class Transaction {
   }
 
   /**
-   * Processes this Transaction. Sets up the Entry object of this Transaction, signs this
-   * Transaction and calculates the hash of this Transaction.
+   * Processes this Transaction. Sets up the Entry object of this Transaction and calculates the
+   * hash of this Transaction. Creates the TransactionOutput object associated with this
+   * Transaction.
    *
    * @return the list of outputs corresponding to: this Transaction and unconsumed Transaction from
    *     inputs
@@ -68,6 +72,7 @@ public class Transaction {
     }
     outputs.add(new TransactionOutput(signee, data, getId()));
 
+    this.outputs = outputs;
     return outputs;
   }
 
