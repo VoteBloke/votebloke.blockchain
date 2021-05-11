@@ -21,6 +21,7 @@ public class Chain {
    */
   public Chain(Block genesisBlock) {
     blockchain.add(genesisBlock);
+    this.latestBlockHash = genesisBlock.getHash();
   }
 
   /**
@@ -39,7 +40,7 @@ public class Chain {
         if (!block.isBlockValid()) {
           return false;
         }
-        if (!previousBlock.getHash().equals(block.getHash())) {
+        if (!previousBlock.getHash().equals(block.getPreviousHash())) {
           return false;
         }
       }
