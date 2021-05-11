@@ -2,7 +2,6 @@ package blockchain;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,7 +81,7 @@ public class Vote extends Entry {
    * @throws IllegalArgumentException if either `inputEntries`, this Vote's answer are not valid
    */
   @Override
-  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+  public final ArrayList<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
       throws IllegalArgumentException {
     if (inputEntries.size() != 1) {
       throw new IllegalArgumentException("inputEntries must be of length 1 in new Vote(...)");

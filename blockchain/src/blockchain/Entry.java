@@ -1,5 +1,6 @@
 package blockchain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public abstract class Entry extends Object {
     this.timeStamp = new Date(System.currentTimeMillis());
   }
 
-  public abstract List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+  public abstract ArrayList<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
       throws IllegalArgumentException;
 
   public abstract boolean validateEntry();

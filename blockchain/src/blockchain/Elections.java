@@ -31,16 +31,9 @@ public class Elections extends Entry {
   public Elections(PublicKey electionCaller, String electionsQuestion, String[] answers) {
     super();
 
-    if (electionsQuestion == null) {
-      throw new IllegalArgumentException("electionsQuestion cannot be null in new Elections(...)");
-    }
-    if (answers == null) {
-      throw new IllegalArgumentException("answers cannot be null in new Elections(...)");
-    }
-
     this.electionCaller = electionCaller;
-    this.electionsQuestion = electionsQuestion;
-    this.answers = answers;
+    setQuestion(electionsQuestion);
+    setAnswers(answers);
   }
 
   public Elections(PublicKey electionCaller, String electionsQuestion) {
@@ -51,7 +44,7 @@ public class Elections extends Entry {
     this(electionCaller, "", new String[] {});
   }
 
-  // Methods
+  // Public
   /**
    * Sets the id for this Elections. Performs basic checks on the question and answers in this
    * Elections.
@@ -59,12 +52,13 @@ public class Elections extends Entry {
    * <p>Elections must have null input entries.
    *
    * @param inputEntries the entries that are passed to this Elections
-   * @throws IllegalArgumentException if the inputEntries are different than null
    * @return this Elections object
+   * @throws IllegalArgumentException if the inputEntries are different than null
+   * @throws RuntimeException if the array of answers is of length < 1
    */
   @Override
-  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
-      throws IllegalArgumentException {
+  public final ArrayList<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+      throws IllegalArgumentException, RuntimeException {
     if (inputEntries != null) {
       throw new IllegalArgumentException(
           "inputEntries needs to be null in new Elections(ArrayList<Entry> inputEntries");
@@ -92,9 +86,11 @@ public class Elections extends Entry {
    * a Transaction objects.
    *
    * @return this Elections object
-   * @throws IllegalArgumentException if the inputEntries are different than null
+   * @throws IllegalArgumentException if the inputEntries are different than null * @throws
+   * @throws RuntimeException if the array of answers is of length < 1
    */
-  public final List<TransactionOutput> processEntry() throws IllegalArgumentException {
+  public final ArrayList<TransactionOutput> processEntry()
+      throws IllegalArgumentException, RuntimeException {
     return (processEntry(null));
   }
 
@@ -105,13 +101,17 @@ public class Elections extends Entry {
    */
   @Override
   public boolean validateEntry() {
-    return getId()
-        .equals(
-            StringUtils.hashString(
-                StringUtils.keyToString(electionCaller)
-                    + getTimeStamp()
-                    + electionsQuestion
-                    + Arrays.toString(answers)));
+    try {
+      return getId()
+          .equals(
+              StringUtils.hashString(
+                  StringUtils.keyToString(electionCaller)
+                      + getTimeStamp()
+                      + electionsQuestion
+                      + Arrays.toString(answers)));
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   public final PublicKey getElectionsCaller() {
@@ -127,16 +127,36 @@ public class Elections extends Entry {
     return electionsQuestion;
   }
 
-  public final void setQuestion(String electionsQuestion) {
-    this.electionsQuestion = electionsQuestion;
+  /**
+   * Setter of the question posed in this Elections.
+   *
+   * @param electionsQuestion the question posed in this Elections
+   * @throws IllegalArgumentException if the passed question is null
+   */
+  public final void setQuestion(String electionsQuestion) throws IllegalArgumentException {
+    if (electionsQuestion != null) {
+      this.electionsQuestion = electionsQuestion;
+    } else {
+      throw new IllegalArgumentException("electionsQuestion must not be null");
+    }
   }
 
   public final String[] getAnswers() {
     return answers;
   }
 
-  public final void setAnswers(String[] answers) {
-    this.answers = answers;
+  /**
+   * Setter of answers for this Elections.
+   *
+   * @param answers the array of answer for this Elections
+   * @throws IllegalArgumentException when the passed array is null
+   */
+  public final void setAnswers(String[] answers) throws IllegalArgumentException {
+    if (answers != null) {
+      this.answers = answers;
+    } else {
+      throw new IllegalArgumentException("answer must not be null");
+    }
   }
 
   @Override

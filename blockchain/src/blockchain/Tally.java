@@ -69,7 +69,7 @@ public class Tally extends Entry {
    * @return
    */
   @Override
-  public final List<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
+  public final ArrayList<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
       throws IllegalArgumentException {
     ArrayList<Entry> votes = new ArrayList<>();
     for (TransactionInput transactionInput : inputEntries.subList(1, inputEntries.size() - 1)) {
