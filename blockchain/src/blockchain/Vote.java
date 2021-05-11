@@ -175,6 +175,16 @@ public class Vote extends Entry {
     return id;
   }
 
+    @Override
+    public String getEntryType() {
+        return "vote";
+    }
+
+  @Override
+  public String getAuthor() {
+    return StringUtils.keyToString(this.voter);
+  }
+
   /**
    * Returns the id of the Elections object passed to this Vote.
    *

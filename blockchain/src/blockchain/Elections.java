@@ -123,6 +123,16 @@ public class Elections extends Entry {
     return id;
   }
 
+  @Override
+  public String getEntryType() {
+    return "elections";
+  }
+
+  @Override
+  public String getAuthor() {
+    return StringUtils.keyToString(this.electionCaller);
+  }
+
   public final String getQuestion() {
     return electionsQuestion;
   }

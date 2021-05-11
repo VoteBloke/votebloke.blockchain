@@ -1,6 +1,6 @@
 package blockchain;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class VoteBlock extends Block {
   /**
@@ -15,7 +15,7 @@ public class VoteBlock extends Block {
       String previousHash,
       String blockVersion,
       int miningDifficulty,
-      List<TransactionOutput> unconsumedTransactions) {
+      ArrayList<TransactionOutput> unconsumedTransactions) {
     super(previousHash, blockVersion, miningDifficulty, unconsumedTransactions);
   }
 }

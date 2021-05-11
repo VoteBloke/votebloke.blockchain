@@ -33,4 +33,8 @@ public abstract class Entry extends Object {
   public final Date getTimeStamp() {
     return timeStamp;
   }
+
+  public abstract String getEntryType();
+
+  public abstract String getAuthor();
 }

@@ -199,6 +199,16 @@ public class Tally extends Entry {
     return id;
   }
 
+    @Override
+    public String getEntryType() {
+        return "tally";
+    }
+
+  @Override
+  public String getAuthor() {
+    return StringUtils.keyToString(this.teller);
+  }
+
   /** Recalculates the unique identifier of this Tally. */
   private void updateId() {
     this.id =

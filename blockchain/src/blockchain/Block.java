@@ -23,7 +23,7 @@ public class Block {
   private final String previousHash;
 
   /** The Transactions added to this Block. */
-  private List<Transaction> transactions = new ArrayList<>();
+  private ArrayList<Transaction> transactions = new ArrayList<>();
 
   /** The time stamp of the creation of this Block. */
   private final Date timeStamp = new Date(System.currentTimeMillis());
@@ -43,7 +43,7 @@ public class Block {
   /**
    * The list of unconsumed TransactionOutputs. Those outputs were not yet used up by Transactions.
    */
-  private List<TransactionOutput> unconsumedOutputs;
+  private ArrayList<TransactionOutput> unconsumedOutputs;
 
   /**
    * Constructor for the Block class.
@@ -57,7 +57,7 @@ public class Block {
       String previousHash,
       String blockVersion,
       int miningDifficulty,
-      List<TransactionOutput> unconsumedOutputs) {
+      ArrayList<TransactionOutput> unconsumedOutputs) {
     this.previousHash = previousHash;
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;

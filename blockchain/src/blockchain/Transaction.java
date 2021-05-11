@@ -161,4 +161,20 @@ public class Transaction {
   public String getId() {
     return id;
   }
+
+  public String getTimeStamp() {
+    return this.timeStamp.toString();
+  }
+
+  public String getEntryType() {
+    if(this.data != null) {
+      return data.getEntryType();
+    } else {
+      return "null";
+    }
+  }
+
+  public String getSigner() {
+    return StringUtils.keyToString(this.signee);
+  }
 }
