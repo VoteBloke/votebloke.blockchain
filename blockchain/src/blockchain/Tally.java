@@ -2,6 +2,7 @@ package blockchain;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /** A representation of a tally of votes in particular elections. */
@@ -207,6 +208,11 @@ public class Tally extends Entry {
   @Override
   public String getAuthor() {
     return StringUtils.keyToString(this.teller);
+  }
+
+  @Override
+  public HashMap<String, String[]> getMetadata() {
+    return null;
   }
 
   /** Recalculates the unique identifier of this Tally. */

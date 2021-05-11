@@ -1,9 +1,7 @@
 package blockchain;
 
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /** Represents a call for Elections. */
 public class Elections extends Entry {
@@ -133,7 +131,15 @@ public class Elections extends Entry {
     return StringUtils.keyToString(this.electionCaller);
   }
 
-  public final String getQuestion() {
+    @Override
+    public HashMap<String, String[]> getMetadata() {
+        return new HashMap<String, String[]>(Map.<String, String[]>of(
+                "question", new String[] {this.electionsQuestion},
+                "answers", this.answers
+        ));
+    }
+
+    public final String getQuestion() {
     return electionsQuestion;
   }
 

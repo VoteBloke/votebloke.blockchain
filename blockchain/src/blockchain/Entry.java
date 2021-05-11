@@ -2,6 +2,7 @@ package blockchain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /** The abstraction of data stored in a single Transaction. */
@@ -37,4 +38,6 @@ public abstract class Entry extends Object {
   public abstract String getEntryType();
 
   public abstract String getAuthor();
+
+  public abstract HashMap<String, String[]> getMetadata();
 }
