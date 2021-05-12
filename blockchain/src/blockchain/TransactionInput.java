@@ -12,4 +12,8 @@ public class TransactionInput {
   public TransactionInput(Transaction transaction) {
     this.transactionOut = new TransactionOutput(transaction);
   }
+
+  public TransactionOutput getTransactionOut() {
+    return transactionOut;
+  }
 }

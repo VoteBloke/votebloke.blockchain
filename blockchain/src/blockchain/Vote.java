@@ -1,7 +1,11 @@
 package blockchain;
 
 import java.security.PublicKey;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /** Represents a single vote in particular elections. */
 public class Vote extends Entry {

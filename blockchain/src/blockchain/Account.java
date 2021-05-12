@@ -124,6 +124,15 @@ public class Account {
     return voteTransaction;
   }
 
+  public Transaction tally(ArrayList<TransactionInput> inputTransactions) {
+    Tally tally = new Tally(getPublicKey(), null, null);
+    Transaction tallyTransaction = new Transaction(getPublicKey(), tally, inputTransactions);
+    tallyTransaction.processTransaction();
+    tallyTransaction.sign(getPrivateKey());
+
+    return tallyTransaction;
+  }
+
   private PrivateKey getPrivateKey() {
     return privateKey;
   }
