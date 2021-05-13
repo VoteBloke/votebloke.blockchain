@@ -73,7 +73,7 @@ public class Tally extends Entry {
   public final ArrayList<TransactionOutput> processEntry(List<TransactionInput> inputEntries)
       throws IllegalArgumentException {
     ArrayList<Entry> votes = new ArrayList<>();
-    for (TransactionInput transactionInput : inputEntries.subList(1, inputEntries.size() - 1)) {
+    for (TransactionInput transactionInput : inputEntries.subList(1, inputEntries.size())) {
       votes.add(transactionInput.transactionOut.data);
     }
     return (processEntry(inputEntries.get(0).transactionOut, votes));
@@ -88,9 +88,9 @@ public class Tally extends Entry {
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
    */
-  public final ArrayList<TransactionOutput> processEntry(Object elections, List<Entry> votes)
+  public final ArrayList<TransactionOutput> processEntry(TransactionOutput elections, List<Entry> votes)
       throws IllegalArgumentException {
-    setElections(elections);
+    setElections(elections.data);
     setVotes(votes);
     return (processEntry());
   }
@@ -127,7 +127,7 @@ public class Tally extends Entry {
     }
     updateId();
 
-    return new ArrayList<>(List.of(new TransactionOutput(teller, this)));
+    return new ArrayList<>();
   }
 
   /**
@@ -180,9 +180,9 @@ public class Tally extends Entry {
    */
   public final void setVotes(List<Entry> entries) {
     ArrayList<Vote> newVotes = new ArrayList<>();
-    for (Object entry : entries) {
+    for (Entry entry : entries) {
       try {
-        votes.add((Vote) entry);
+        newVotes.add((Vote) entry);
       } catch (ClassCastException | NullPointerException exception) {
         throw new IllegalArgumentException("All elements of entries must be of type Vote");
       }
