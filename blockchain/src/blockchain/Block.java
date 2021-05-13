@@ -243,19 +243,28 @@ public class Block {
    *
    * @param caller the public ECDSA key of the agent who authored the returned Elections objects. If
    *     null returns all active Elections
-   * @return the list of active Elections objects authored by the caller
+   * @return the list of TransactionOutput objects with active Elections authored by the caller
    */
-  public List<Elections> getOpenElections(PublicKey caller) {
-    ArrayList<Elections> activeElections = new ArrayList<>();
+  public ArrayList<TransactionOutput> getOpenElections(PublicKey caller) {
+    ArrayList<TransactionOutput> activeElections = new ArrayList<>();
     unconsumedOutputs.forEach(
         transactionOutput -> {
           if (transactionOutput.data instanceof Elections
               && (caller == null || transactionOutput.isAddressedFrom(caller))) {
-            activeElections.add((Elections) transactionOutput.data);
+            activeElections.add(transactionOutput);
           }
         });
 
     return activeElections;
+  }
+
+  /**
+   * Returns active Elections in this Block.
+   *
+   * @return the list of TransactionOutput objects with active Elections
+   */
+  public ArrayList<TransactionOutput> getOpenElections() {
+    return getOpenElections(null);
   }
 
   public final String getPreviousHash() {
