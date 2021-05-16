@@ -166,7 +166,10 @@ public class Transaction {
     return this.timeStamp.toString();
   }
 
-  /** @return the entry type of this Entry */
+  /**
+   * Returns the entry type of the Entry object in this Transaction.
+   *
+   * @return the type of the Entry object in this Transaction */
   public String getEntryType() {
     if (this.data != null) {
       return data.getEntryType();
