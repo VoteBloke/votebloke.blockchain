@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.votebloke.blockchain.TransactionInputTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-16T19:17:06" hostname="konrads-macbook-pro.home" time="0.0">
-  <properties/>
-  <testcase name="getTransactionOutReturnsExpectedObject()" classname="org.votebloke.blockchain.TransactionInputTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
