@@ -221,8 +221,8 @@ public class Block {
    * @param author the public ECDSA key of the agent who authored the Entry objects looked for in
    *     this method
    * @param selectedClass the fully specified class name of objects included in the return value
-   * @return the array of the Entry objects authored by the provided public key and of type
-   *     specified by selectedClass
+   * @return the array of the TransactionOutput objects authored by the provided public key and of
+   *     type specified by selectedClass
    */
   public <T extends Entry> List<TransactionOutput> authoredBy(
       PublicKey author, Class<T> selectedClass) {
@@ -267,10 +267,21 @@ public class Block {
     return getOpenElections(null);
   }
 
+  /**
+   * Returns the hash of the previous Block in the blockchain.
+   *
+   * @return the hash of the previous Block object in the blockchain
+   */
   public final String getPreviousHash() {
     return this.previousHash;
   }
 
+  /**
+   * Returns the header of this Block. The header consists of the time stamp of creation of this
+   * Block, the version of this Block and the hash of the previous Block object in the blockchain.
+   *
+   * @return the header of this Block
+   */
   private String getHeader() {
     return this.timeStamp + this.blockVersion + this.previousHash;
   }
