@@ -4,8 +4,8 @@ org/votebloke/blockchain/Block.java
  org.votebloke.blockchain.Block
 org/votebloke/blockchain/TransactionOutput.java
  org.votebloke.blockchain.TransactionOutput
-org/votebloke/blockchain/VoteBlock.java
- org.votebloke.blockchain.VoteBlock
+org/votebloke/blockchain/Elections.java
+ org.votebloke.blockchain.Elections
 org/votebloke/blockchain/Chain.java
  org.votebloke.blockchain.Chain
 org/votebloke/blockchain/Entry.java
@@ -22,5 +22,3 @@ org/votebloke/blockchain/TransactionInput.java
  org.votebloke.blockchain.TransactionInput
 org/votebloke/blockchain/VotesTeller.java
  org.votebloke.blockchain.VotesTeller
-org/votebloke/blockchain/Elections.java
- org.votebloke.blockchain.Elections

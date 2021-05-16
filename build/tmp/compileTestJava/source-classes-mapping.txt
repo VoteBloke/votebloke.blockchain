@@ -8,9 +8,9 @@ org/votebloke/blockchain/VoteTest.java
  org.votebloke.blockchain.VoteTest
 org/votebloke/blockchain/AccountTest.java
  org.votebloke.blockchain.AccountTest
-org/votebloke/blockchain/VotesTellerTest.java
- org.votebloke.blockchain.VotesTellerTest
-org/votebloke/blockchain/BlockTest.java
- org.votebloke.blockchain.BlockTest
 org/votebloke/blockchain/TransactionTest.java
  org.votebloke.blockchain.TransactionTest
+org/votebloke/blockchain/BlockTest.java
+ org.votebloke.blockchain.BlockTest
+org/votebloke/blockchain/VotesTellerTest.java
+ org.votebloke.blockchain.VotesTellerTest
