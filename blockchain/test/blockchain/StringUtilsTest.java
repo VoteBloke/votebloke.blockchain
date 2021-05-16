@@ -1,3 +1,0 @@
-package blockchain;
-
-class StringUtilsTest {}
