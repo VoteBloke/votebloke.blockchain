@@ -141,11 +141,9 @@ public class ElectionsTest {
   }
 
   @Test
-  public void electionsProcessEntryReturnsArrayWithItself() {
+  public void electionsProcessEntryReturnsEmptyArray() {
     ArrayList<TransactionOutput> processedEntry = electionsFull.processEntry();
-    assertEquals(1, processedEntry.size());
-    assertEquals(electionsFull, processedEntry.get(0).data);
-    assertEquals(author, processedEntry.get(0).author);
+    assertEquals(0, processedEntry.size());
   }
 
   @Test
