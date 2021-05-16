@@ -20,6 +20,12 @@ public class Tally extends Entry {
   private final PublicKey teller;
 
   /**
+   * The object tallying the votes. This object performs the actual tallying of the votes in this
+   * Tally.
+   */
+  private VotesTeller votesTeller;
+
+  /**
    * A constructor for Tally.
    *
    * @param teller the public ECDSA key of Account that tallies the votes in the elections
@@ -190,6 +196,11 @@ public class Tally extends Entry {
     this.votes = newVotes;
   }
 
+  /** Sets the object, which tallies the votes. */
+  public final void setVotesTeller(VotesTeller votesTeller) {
+    this.votesTeller = votesTeller;
+  }
+
   /**
    * The unique identifier of this Tally is a 64-digit hash of its contents.
    *
@@ -225,3 +236,5 @@ public class Tally extends Entry {
                 + getTimeStamp());
   }
 }
+
+
