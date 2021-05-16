@@ -166,8 +166,9 @@ public class Transaction {
     return this.timeStamp.toString();
   }
 
+  /** @return the entry type of this Entry */
   public String getEntryType() {
-    if(this.data != null) {
+    if (this.data != null) {
       return data.getEntryType();
     } else {
       return "null";

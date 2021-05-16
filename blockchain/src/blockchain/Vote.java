@@ -177,10 +177,10 @@ public class Vote extends Entry {
     return id;
   }
 
-    @Override
-    public String getEntryType() {
-        return "vote";
-    }
+  @Override
+  public String getEntryType() {
+    return "vote";
+  }
 
   @Override
   public String getAuthor() {
@@ -189,10 +189,10 @@ public class Vote extends Entry {
 
   @Override
   public HashMap<String, String[]> getMetadata() {
-    return new HashMap<String, String[]>(Map.<String, String[]>of(
+    return new HashMap<String, String[]>(
+        Map.<String, String[]>of(
             "question", new String[] {this.elections.getQuestion()},
-            "answer", new String[] {this.answer}
-    ));
+            "answer", new String[] {this.answer}));
   }
 
   /**

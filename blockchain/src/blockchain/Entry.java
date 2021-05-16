@@ -39,5 +39,13 @@ public abstract class Entry extends Object {
 
   public abstract String getAuthor();
 
+  /**
+   * Returns the summary of this Entry.
+   *
+   * <p>This is a factory method generating a summary of this Entry in a form of a HashMap. This
+   * summary can be used to create a simplified JSON representation of this Entry.
+   *
+   * @return the summary of this Entry
+   */
   public abstract HashMap<String, String[]> getMetadata();
 }

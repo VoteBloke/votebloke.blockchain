@@ -88,8 +88,8 @@ public class Tally extends Entry {
    * @throws IllegalArgumentException if any of the Vote objects don't match the Elections object or
    *     are itself not validated
    */
-  public final ArrayList<TransactionOutput> processEntry(TransactionOutput elections, List<Entry> votes)
-      throws IllegalArgumentException {
+  public final ArrayList<TransactionOutput> processEntry(
+      TransactionOutput elections, List<Entry> votes) throws IllegalArgumentException {
     setElections(elections.data);
     setVotes(votes);
     return (processEntry());
