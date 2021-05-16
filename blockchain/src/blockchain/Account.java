@@ -15,9 +15,9 @@ import java.util.ArrayList;
 /** A representation of a single agent. */
 public class Account {
   /** The public ECDSA key for this Account. This also serves as means to identify this Account. */
-  private PublicKey publicKey;
+  private final PublicKey publicKey;
   /** The private ECDSA key for this Account. */
-  private PrivateKey privateKey;
+  private final PrivateKey privateKey;
 
   /**
    * The constructor for the Account class.
@@ -122,6 +122,26 @@ public class Account {
     voteTransaction.sign(getPrivateKey());
 
     return voteTransaction;
+  }
+
+  /**
+   * Tallies elections.
+   *
+   * <p>Takes input transactions, creates a transaction with a tally of a single Elections object
+   * passed to it and returns the signed tally transaction.
+   *
+   * @param inputTransactions this list of TransactionInput objects to tally. The first element of
+   *     this list is an input with an Elections object and the following inputs contain Vote
+   *     objects.
+   * @return the signed Transaction object with a Tally object
+   */
+  public Transaction tally(ArrayList<TransactionInput> inputTransactions) {
+    Tally tally = new Tally(getPublicKey(), null, null);
+    Transaction tallyTransaction = new Transaction(getPublicKey(), tally, inputTransactions);
+    tallyTransaction.processTransaction();
+    tallyTransaction.sign(getPrivateKey());
+
+    return tallyTransaction;
   }
 
   private PrivateKey getPrivateKey() {

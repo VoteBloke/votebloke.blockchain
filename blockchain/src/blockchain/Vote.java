@@ -2,7 +2,9 @@ package blockchain;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /** Represents a single vote in particular elections. */
@@ -151,7 +153,7 @@ public class Vote extends Entry {
    */
   public final List<TransactionOutput> processEntry() {
     return (processEntry(
-        new ArrayList<TransactionInput>(
+        new ArrayList<>(
             List.of(
                 new TransactionInput(
                     new TransactionOutput(elections.getElectionsCaller(), elections))))));
@@ -173,6 +175,24 @@ public class Vote extends Entry {
   @Override
   public final String getId() {
     return id;
+  }
+
+  @Override
+  public String getEntryType() {
+    return "vote";
+  }
+
+  @Override
+  public String getAuthor() {
+    return StringUtils.keyToString(this.voter);
+  }
+
+  @Override
+  public HashMap<String, String[]> getMetadata() {
+    return new HashMap<>(
+        Map.of(
+            "question", new String[] {this.elections.getQuestion()},
+            "answer", new String[] {this.answer}));
   }
 
   /**

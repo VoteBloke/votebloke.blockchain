@@ -145,7 +145,6 @@ public class Transaction {
       if (!data.validateEntry()) {
         return false;
       }
-      ;
     } catch (Exception e) {
       return false;
     }
@@ -160,5 +159,25 @@ public class Transaction {
    */
   public String getId() {
     return id;
+  }
+
+  public String getTimeStamp() {
+    return this.timeStamp.toString();
+  }
+
+  /**
+   * Returns the entry type of the Entry object in this Transaction.
+   *
+   * @return the type of the Entry object in this Transaction */
+  public String getEntryType() {
+    if (this.data != null) {
+      return data.getEntryType();
+    } else {
+      return "null";
+    }
+  }
+
+  public String getSigner() {
+    return StringUtils.keyToString(this.signee);
   }
 }
