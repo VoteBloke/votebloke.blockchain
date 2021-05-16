@@ -145,7 +145,6 @@ public class Transaction {
       if (!data.validateEntry()) {
         return false;
       }
-      ;
     } catch (Exception e) {
       return false;
     }

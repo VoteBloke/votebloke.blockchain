@@ -4,6 +4,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /** This is a Block class. Represents a single block in the blockchain. */
 public class Block {
@@ -61,11 +62,7 @@ public class Block {
     this.previousHash = previousHash;
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;
-    if (unconsumedOutputs == null) {
-      this.unconsumedOutputs = new ArrayList<>();
-    } else {
-      this.unconsumedOutputs = unconsumedOutputs;
-    }
+    this.unconsumedOutputs = Objects.requireNonNullElseGet(unconsumedOutputs, ArrayList::new);
     id = this.calculateId();
   }
 

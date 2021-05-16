@@ -137,9 +137,8 @@ public class Elections extends Entry {
 
   @Override
   public HashMap<String, String[]> getMetadata() {
-    return new HashMap<String, String[]>(
-        Map.<String, String[]>of(
-            "question", new String[] {this.electionsQuestion}, "answers", this.answers));
+    return new HashMap<>(
+        Map.of("question", new String[] {this.electionsQuestion}, "answers", this.answers));
   }
 
   public final String getQuestion() {

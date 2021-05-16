@@ -15,9 +15,9 @@ import java.util.ArrayList;
 /** A representation of a single agent. */
 public class Account {
   /** The public ECDSA key for this Account. This also serves as means to identify this Account. */
-  private PublicKey publicKey;
+  private final PublicKey publicKey;
   /** The private ECDSA key for this Account. */
-  private PrivateKey privateKey;
+  private final PrivateKey privateKey;
 
   /**
    * The constructor for the Account class.

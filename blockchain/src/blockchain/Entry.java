@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /** The abstraction of data stored in a single Transaction. */
-public abstract class Entry extends Object {
+public abstract class Entry {
   /** The time of creation of this Entry. */
-  private Date timeStamp;
+  private final Date timeStamp;
 
   public Entry() {
     this.timeStamp = new Date(System.currentTimeMillis());

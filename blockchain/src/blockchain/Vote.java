@@ -153,7 +153,7 @@ public class Vote extends Entry {
    */
   public final List<TransactionOutput> processEntry() {
     return (processEntry(
-        new ArrayList<TransactionInput>(
+        new ArrayList<>(
             List.of(
                 new TransactionInput(
                     new TransactionOutput(elections.getElectionsCaller(), elections))))));
@@ -189,8 +189,8 @@ public class Vote extends Entry {
 
   @Override
   public HashMap<String, String[]> getMetadata() {
-    return new HashMap<String, String[]>(
-        Map.<String, String[]>of(
+    return new HashMap<>(
+        Map.of(
             "question", new String[] {this.elections.getQuestion()},
             "answer", new String[] {this.answer}));
   }
