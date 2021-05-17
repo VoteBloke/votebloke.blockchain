@@ -38,3 +38,6 @@ out/
 
 ### Jars ###
 lib/
+
+### MacOS ###
+.DS_Store
