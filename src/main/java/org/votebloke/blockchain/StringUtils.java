@@ -7,6 +7,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.util.Base64;
+import java.util.concurrent.ThreadLocalRandom;
 
 class StringUtils {
   /**
@@ -76,6 +77,32 @@ class StringUtils {
       return ecdsaVerify.verify(signature);
     } catch (Exception e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  /** Tests whether a key pair matches.
+   *
+   * @param privateKey the private key
+   * @param publicKey the public key
+   * @return true if keys match; false otherwise
+   */
+  public static boolean keysMatch(PrivateKey privateKey, PublicKey publicKey) {
+    byte[] challenge = new byte[10000];
+    ThreadLocalRandom.current().nextBytes(challenge);
+
+    Signature signature;
+    try {
+      signature = Signature.getInstance("SHA256withECDSA");
+      signature.initSign(privateKey);
+      signature.update(challenge);
+      byte[] encryptedChallenge = signature.sign();
+
+      signature.initVerify(publicKey);
+      signature.update(challenge);
+      return signature.verify(encryptedChallenge);
+
+    } catch (Exception e) {
+      return false;
     }
   }
 }

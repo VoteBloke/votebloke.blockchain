@@ -27,7 +27,6 @@ public class Transaction {
    */
   private String id;
 
-  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
   private byte[] signature;
 
   /** The time stamp of creation of this Transaction. */
@@ -97,8 +96,10 @@ public class Transaction {
    * @param privateKey the private ECDSA key used to encrypt the data
    */
   public void sign(PrivateKey privateKey) {
-    String data = StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
-    signature = StringUtils.signWithEcdsa(privateKey, data);
+    if (StringUtils.keysMatch(privateKey, this.signee)) {
+      String data = StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
+      setSignature(StringUtils.signWithEcdsa(privateKey, data));
+    }
   }
 
   /**
@@ -112,7 +113,7 @@ public class Transaction {
     return StringUtils.verifyEcdsa(
         signee,
         StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString(),
-        signature);
+        getSignature());
   }
 
   /**
@@ -168,7 +169,8 @@ public class Transaction {
   /**
    * Returns the entry type of the Entry object in this Transaction.
    *
-   * @return the type of the Entry object in this Transaction */
+   * @return the type of the Entry object in this Transaction
+   */
   public String getEntryType() {
     if (this.data != null) {
       return data.getEntryType();
@@ -179,5 +181,15 @@ public class Transaction {
 
   public String getSigner() {
     return StringUtils.keyToString(this.signee);
+  }
+
+  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
+  public byte[] getSignature() {
+    return signature;
+  }
+
+  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
+  public void setSignature(byte[] signature) {
+    this.signature = signature;
   }
 }

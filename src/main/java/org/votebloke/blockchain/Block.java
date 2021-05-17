@@ -46,6 +46,9 @@ public class Block {
    */
   private ArrayList<TransactionOutput> unconsumedOutputs;
 
+  /** The list of unsigned Transactions. */
+  private ArrayList<Transaction> unsignedTransactions;
+
   /**
    * Constructor for the Block class.
    *
@@ -63,6 +66,30 @@ public class Block {
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;
     this.unconsumedOutputs = Objects.requireNonNullElseGet(unconsumedOutputs, ArrayList::new);
+    this.unsignedTransactions = new ArrayList<>();
+    id = this.calculateId();
+  }
+
+  /**
+   * Constructor for the Block class.
+   *
+   * @param previousHash the hash of the previous Block
+   * @param blockVersion the version of this Block
+   * @param miningDifficulty the mining difficulty of this Block
+   * @param unconsumedOutputs the pool of unconsumed TransactionOutputs
+   * @param unsignedTransactions the list of unsigned Transaction objects
+   */
+  public Block(
+      String previousHash,
+      String blockVersion,
+      int miningDifficulty,
+      ArrayList<TransactionOutput> unconsumedOutputs,
+      ArrayList<Transaction> unsignedTransactions) {
+    this.previousHash = previousHash;
+    this.blockVersion = blockVersion;
+    this.miningDifficulty = miningDifficulty;
+    this.unconsumedOutputs = Objects.requireNonNullElseGet(unconsumedOutputs, ArrayList::new);
+    this.unsignedTransactions = unsignedTransactions;
     id = this.calculateId();
   }
 
@@ -86,6 +113,11 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
+    if (transaction.getSignature() == null) {
+      getUnsignedTransactions().add(transaction);
+      return;
+    }
+
     if (transaction.inputs != null) {
       for (TransactionInput inputTransaction : transaction.inputs) {
         if (!unconsumedOutputs.contains(inputTransaction.transactionOut)) {
@@ -262,6 +294,15 @@ public class Block {
    */
   public ArrayList<TransactionOutput> getOpenElections() {
     return getOpenElections(null);
+  }
+
+  /**
+   * Returns the list of unsigned Transaction objects in this Block.
+   *
+   * @return the list of unsigned Transaction objects in this Block.
+   */
+  public ArrayList<Transaction> getUnsignedTransactions() {
+    return this.unsignedTransactions;
   }
 
   /**
