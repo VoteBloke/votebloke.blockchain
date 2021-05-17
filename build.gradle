@@ -20,3 +20,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+jar {
+    enabled = true
+    archiveFileName = 'org.votebloke.blockchain.jar'
+}
