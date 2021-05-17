@@ -21,7 +21,12 @@ test {
     useJUnitPlatform()
 }
 
+bootJar {
+    enabled = false
+}
+
 jar {
     enabled = true
     archiveFileName = 'org.votebloke.blockchain.jar'
+    destinationDirectory.set(file("../libs"))
 }
