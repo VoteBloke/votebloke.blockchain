@@ -19,6 +19,18 @@ public class AccountTest {
   }
 
   @Test
+  void constructorsDoNotThrow() {
+    Assertions.assertDoesNotThrow(() -> new Account(null, null));
+    Assertions.assertDoesNotThrow(() -> new Account(Account.generateKeys().getPublic()));
+    Assertions.assertDoesNotThrow(
+        () ->
+            new Account(
+                "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEiGe"
+                    + "OT38/VIf5VdBFRwI8eQga86vzR3q4Ks1RPtT/PInoSZO2"
+                    + "fw84kKsL1ZQfmx9TP0KgUcpQLJmkcnfIQQxyuA=="));
+  }
+
+  @Test
   void createElectionsTestReturnsValidTransaction() {
     Transaction electionsTransaction =
         ac.createElections("test question", new String[] {"answer1", "answer2"});

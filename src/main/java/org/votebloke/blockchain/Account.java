@@ -10,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 /** A representation of a single agent. */
@@ -44,7 +45,7 @@ public class Account {
    *
    * @param publicKey the string encoded public key identifying this Account
    */
-  public Account(String publicKey) {
+  public Account(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
     this(StringUtils.stringToPublicKey(publicKey), null);
   }
 
@@ -61,24 +62,6 @@ public class Account {
     KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC");
     kpg.initialize(new ECGenParameterSpec("secp256r1"), new SecureRandom());
     return kpg.generateKeyPair();
-  }
-
-  /**
-   * Exports the private and public key of this Account to files in the provided directory.
-   *
-   * @param dir the directory that will hold the files with the private and the public key
-   * @throws IOException when writing to files failed
-   */
-  public void exportKeys(String dir) throws IOException {
-    FileOutputStream out;
-
-    out = new FileOutputStream(dir + ".key");
-    out.write(getPrivateKey().getEncoded());
-    out.close();
-
-    out = new FileOutputStream(dir + ".pub");
-    out.write(getPublicKey().getEncoded());
-    out.close();
   }
 
   /**
