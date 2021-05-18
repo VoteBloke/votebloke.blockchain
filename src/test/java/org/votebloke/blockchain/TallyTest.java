@@ -1,11 +1,6 @@
 package org.votebloke.blockchain;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.when;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
@@ -14,8 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class TallyTest {
@@ -96,6 +95,7 @@ class TallyTest {
     HashMap<String, String[]> expected =
         new HashMap<String, String[]>(Map.of("test string", new String[] {"test value"}));
     Assertions.assertEquals(expected.keySet(), tally.getMetadata().keySet());
-    Assertions.assertArrayEquals(expected.get("test string"), tally.getMetadata().get("test string"));
+    Assertions.assertArrayEquals(
+        expected.get("test string"), tally.getMetadata().get("test string"));
   }
 }
