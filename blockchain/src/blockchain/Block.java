@@ -4,6 +4,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /** This is a Block class. Represents a single block in the blockchain. */
 public class Block {
@@ -23,7 +24,7 @@ public class Block {
   private final String previousHash;
 
   /** The Transactions added to this Block. */
-  private List<Transaction> transactions = new ArrayList<>();
+  private ArrayList<Transaction> transactions = new ArrayList<>();
 
   /** The time stamp of the creation of this Block. */
   private final Date timeStamp = new Date(System.currentTimeMillis());
@@ -43,7 +44,7 @@ public class Block {
   /**
    * The list of unconsumed TransactionOutputs. Those outputs were not yet used up by Transactions.
    */
-  private List<TransactionOutput> unconsumedOutputs;
+  private ArrayList<TransactionOutput> unconsumedOutputs;
 
   /**
    * Constructor for the Block class.
@@ -57,15 +58,11 @@ public class Block {
       String previousHash,
       String blockVersion,
       int miningDifficulty,
-      List<TransactionOutput> unconsumedOutputs) {
+      ArrayList<TransactionOutput> unconsumedOutputs) {
     this.previousHash = previousHash;
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;
-    if (unconsumedOutputs == null) {
-      this.unconsumedOutputs = new ArrayList<>();
-    } else {
-      this.unconsumedOutputs = unconsumedOutputs;
-    }
+    this.unconsumedOutputs = Objects.requireNonNullElseGet(unconsumedOutputs, ArrayList::new);
     id = this.calculateId();
   }
 
@@ -83,7 +80,8 @@ public class Block {
    * Adds a Transaction to this Block.
    *
    * <p>Performs processing and validation of the passed Transaction object. Updates the pool of
-   * available, unconsumed TransactionOutput objects in this Block.
+   * available, unconsumed TransactionOutput objects in this Block by removing the input
+   * Transactions consumed by the transaction and adding the outputs of the transaction.
    *
    * @param transaction the transaction to be added
    */
@@ -185,7 +183,7 @@ public class Block {
    *
    * @return the unconsumed TransactionOutputs of this Block
    */
-  public List<TransactionOutput> getUnconsumedOutputs() {
+  public ArrayList<TransactionOutput> getUnconsumedOutputs() {
     return unconsumedOutputs;
   }
 
@@ -220,8 +218,8 @@ public class Block {
    * @param author the public ECDSA key of the agent who authored the Entry objects looked for in
    *     this method
    * @param selectedClass the fully specified class name of objects included in the return value
-   * @return the array of the Entry objects authored by the provided public key and of type
-   *     specified by selectedClass
+   * @return the array of the TransactionOutput objects authored by the provided public key and of
+   *     type specified by selectedClass
    */
   public <T extends Entry> List<TransactionOutput> authoredBy(
       PublicKey author, Class<T> selectedClass) {
@@ -242,25 +240,45 @@ public class Block {
    *
    * @param caller the public ECDSA key of the agent who authored the returned Elections objects. If
    *     null returns all active Elections
-   * @return the list of active Elections objects authored by the caller
+   * @return the list of TransactionOutput objects with active Elections authored by the caller
    */
-  public List<Elections> getOpenElections(PublicKey caller) {
-    ArrayList<Elections> activeElections = new ArrayList<>();
+  public ArrayList<TransactionOutput> getOpenElections(PublicKey caller) {
+    ArrayList<TransactionOutput> activeElections = new ArrayList<>();
     unconsumedOutputs.forEach(
         transactionOutput -> {
           if (transactionOutput.data instanceof Elections
               && (caller == null || transactionOutput.isAddressedFrom(caller))) {
-            activeElections.add((Elections) transactionOutput.data);
+            activeElections.add(transactionOutput);
           }
         });
 
     return activeElections;
   }
 
+  /**
+   * Returns active Elections in this Block.
+   *
+   * @return the list of TransactionOutput objects with active Elections
+   */
+  public ArrayList<TransactionOutput> getOpenElections() {
+    return getOpenElections(null);
+  }
+
+  /**
+   * Returns the hash of the previous Block in the blockchain.
+   *
+   * @return the hash of the previous Block object in the blockchain
+   */
   public final String getPreviousHash() {
     return this.previousHash;
   }
 
+  /**
+   * Returns the header of this Block. The header consists of the time stamp of creation of this
+   * Block, the version of this Block and the hash of the previous Block object in the blockchain.
+   *
+   * @return the header of this Block
+   */
   private String getHeader() {
     return this.timeStamp + this.blockVersion + this.previousHash;
   }
