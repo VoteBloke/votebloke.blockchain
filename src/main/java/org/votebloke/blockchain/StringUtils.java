@@ -9,7 +9,7 @@ import java.security.Signature;
 import java.util.Base64;
 import java.util.concurrent.ThreadLocalRandom;
 
-class StringUtils {
+public class StringUtils {
   /**
    * Converts a string to a hex representation of its bytes. First converts the text to bytes then
    * to hex.

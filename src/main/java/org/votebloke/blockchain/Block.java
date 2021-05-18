@@ -299,10 +299,28 @@ public class Block {
   /**
    * Returns the list of unsigned Transaction objects in this Block.
    *
+   * @param keyId the string representation of the public key, which authored the returned
+   *     Transactions. If null, then returns all Transactions.
+   * @return the list of unsigned Transaction objects in this Block.
+   */
+  public ArrayList<Transaction> getUnsignedTransactions(String keyId) {
+    ArrayList<Transaction> unsignedTransactions = new ArrayList<>();
+    unsignedTransactions.forEach(
+        transaction -> {
+          if (transaction.getSigner().equals(keyId) || keyId == null) {
+            unsignedTransactions.add(transaction);
+          }
+        });
+    return this.unsignedTransactions;
+  }
+
+  /**
+   * Returns the list of unsigned Transaction objects in this Block.
+   *
    * @return the list of unsigned Transaction objects in this Block.
    */
   public ArrayList<Transaction> getUnsignedTransactions() {
-    return this.unsignedTransactions;
+    return getUnsignedTransactions(null);
   }
 
   /**
@@ -322,5 +340,14 @@ public class Block {
    */
   private String getHeader() {
     return this.timeStamp + this.blockVersion + this.previousHash;
+  }
+
+  public void signTransaction(String transactionId, byte[] signature) {
+    Transaction unsignedTransaction = unsignedTransactions.stream().filter(transaction -> transaction.getId().equals(transactionId)).findFirst().orElse(null);
+    unsignedTransactions.remove(unsignedTransaction);
+    if(unsignedTransaction != null) {
+      unsignedTransaction.setSignature(signature);
+      transactions.add(unsignedTransaction);
+    }
   }
 }

@@ -56,6 +56,6 @@ class BlockTest {
 
     Assertions.assertArrayEquals(
         (new ArrayList<Transaction>(List.of(testTransaction))).toArray(),
-        block.getUnsignedTransactions().toArray());
+        block.getUnsignedTransactions(null).toArray());
   }
 }
