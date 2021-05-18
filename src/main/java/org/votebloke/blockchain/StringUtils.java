@@ -2,13 +2,20 @@ package org.votebloke.blockchain;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * A set of utility functions for the votebloke.blockchain library.
+ */
 public class StringUtils {
   /**
    * Converts a string to a hex representation of its bytes. First converts the text to bytes then
@@ -37,6 +44,22 @@ public class StringUtils {
 
   public static String keyToString(Key key) {
     return Base64.getEncoder().encodeToString(key.getEncoded());
+  }
+
+  /**
+   * Converts a string encoded public key to a PublicKey object.
+   *
+   * @param string the provided string encoded public key
+   * @return the ECDSA public key
+   * @throws NoSuchAlgorithmException if there is no provider of the ECDSA algorithm
+   * @throws InvalidKeySpecException if the encoded public key does not match the ECDSA key factory
+   */
+  public static PublicKey stringToPublicKey(String string)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
+    X509EncodedKeySpec publicKeySpec =
+        new X509EncodedKeySpec(string.getBytes(StandardCharsets.UTF_8));
+    KeyFactory keyFactory = KeyFactory.getInstance("EC");
+    return keyFactory.generatePublic(publicKeySpec);
   }
 
   /**
@@ -80,7 +103,8 @@ public class StringUtils {
     }
   }
 
-  /** Tests whether a key pair matches.
+  /**
+   * Tests whether a key pair matches.
    *
    * @param privateKey the private key
    * @param publicKey the public key

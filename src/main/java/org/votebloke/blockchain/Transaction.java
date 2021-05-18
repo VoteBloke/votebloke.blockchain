@@ -118,10 +118,7 @@ public class Transaction {
    * @return true if the signature matches the signee; false otherwise
    */
   public boolean verifySignature() {
-    return StringUtils.verifyEcdsa(
-        signee,
-        StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString(),
-        getSignature());
+    return StringUtils.verifyEcdsa(signee, getSignData(), getSignature());
   }
 
   /**
@@ -196,8 +193,26 @@ public class Transaction {
     return signature;
   }
 
-  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
-  public void setSignature(byte[] signature) {
+  /**
+   * Sets the signature of this Transaction.
+   *
+   * @implNote this method has a strong exception safety guarantee. This Transaction will not change
+   *     state if the method throws.
+   * @param signature the signature to set
+   * @return true if the signature is verified; false otherwise
+   */
+  public boolean setSignature(byte[] signature) {
     this.signature = signature;
+    try {
+      if (verifySignature()) {
+        return true;
+      } else {
+        this.signature = null;
+        return false;
+      }
+    } catch (Exception e) {
+      this.signature = null;
+      return false;
+    }
   }
 }

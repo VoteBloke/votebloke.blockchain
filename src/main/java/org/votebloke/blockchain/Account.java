@@ -40,6 +40,15 @@ public class Account {
   }
 
   /**
+   * A constructor for the Account class.
+   *
+   * @param publicKey the string encoded public key identifying this Account
+   */
+  public Account(String publicKey) {
+    this(StringUtils.stringToPublicKey(publicKey), null);
+  }
+
+  /**
    * Generates a private and public key pair using an elliptic curve algorithm (256 bits size).
    *
    * @return the generated KeyPair

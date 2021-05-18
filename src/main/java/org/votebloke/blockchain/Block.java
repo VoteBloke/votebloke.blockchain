@@ -342,11 +342,20 @@ public class Block {
     return this.timeStamp + this.blockVersion + this.previousHash;
   }
 
+  /**
+   * Signs a Transaction object with a provided signature.
+   *
+   * @param transactionId the id of the signed Transaction
+   * @param signature the signature
+   */
   public void signTransaction(String transactionId, byte[] signature) {
-    Transaction unsignedTransaction = unsignedTransactions.stream().filter(transaction -> transaction.getId().equals(transactionId)).findFirst().orElse(null);
-    unsignedTransactions.remove(unsignedTransaction);
-    if(unsignedTransaction != null) {
-      unsignedTransaction.setSignature(signature);
+    Transaction unsignedTransaction =
+        unsignedTransactions.stream()
+            .filter(transaction -> transaction.getId().equals(transactionId))
+            .findFirst()
+            .orElse(null);
+    if (unsignedTransaction != null && unsignedTransaction.setSignature(signature)) {
+      unsignedTransactions.remove(unsignedTransaction);
       transactions.add(unsignedTransaction);
     }
   }
