@@ -96,10 +96,18 @@ public class Transaction {
    * @param privateKey the private ECDSA key used to encrypt the data
    */
   public void sign(PrivateKey privateKey) {
-    if (StringUtils.keysMatch(privateKey, this.signee)) {
-      String data = StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
-      setSignature(StringUtils.signWithEcdsa(privateKey, data));
-    }
+    String data = getSignData();
+    signature = StringUtils.signWithEcdsa(privateKey, data);
+  }
+
+  /**
+   * Returns the string, which is encrypted with a private key to create a signature for this
+   * Transaction.
+   *
+   * @return the character string characterizing this Transaction
+   */
+  public String getSignData() {
+    return StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
   }
 
   /**
