@@ -1,7 +1,9 @@
 package org.votebloke.blockchain;
 
+import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -358,5 +360,17 @@ public class Block {
       unsignedTransactions.remove(unsignedTransaction);
       transactions.add(unsignedTransaction);
     }
+  }
+
+  /**
+   * Signs a Transaction object with a provided signature.
+   *
+   * @param transactionId the id of the signed Transaction
+   * @param base64Signature the base64 decoded signature
+   */
+  public void signTransaction(String transactionId, String base64Signature) {
+    signTransaction(
+        transactionId,
+        Base64.getDecoder().decode(base64Signature.getBytes(StandardCharsets.UTF_8)));
   }
 }

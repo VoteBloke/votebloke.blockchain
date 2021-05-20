@@ -16,8 +16,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /** A set of utility functions for the votebloke.blockchain library. */
 public class StringUtils {
   /**
-   * Converts a string to a hex representation of its bytes. First converts the text to bytes then
-   * to hex.
+   * Converts a string to a hex representation of its hashed bytes. First converts the text to bytes
+   * then to hex.
    *
    * @param text the string to be converted.
    * @return the hex representation of byte-representation of the \code{text}
