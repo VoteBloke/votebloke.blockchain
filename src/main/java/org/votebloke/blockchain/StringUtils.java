@@ -49,7 +49,7 @@ public class StringUtils {
   public static String keyToString(Key key) {
     if (key != null) {
       return Base64.getEncoder().encodeToString(key.getEncoded());
-      } else {
+    } else {
       return "";
     }
   }

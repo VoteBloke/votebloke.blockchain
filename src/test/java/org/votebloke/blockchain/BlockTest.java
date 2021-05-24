@@ -55,7 +55,9 @@ class BlockTest {
 
   @Test
   void getUnsignedTransactionsReturnsItemsPassedInConstructor() {
-    Transaction testTransaction = new Transaction(null, null, null);
+    Elections testElections =
+            new Elections(keyPair.getPublic(), "testQuestion", new String[] {"a1"});
+    Transaction testTransaction = new Transaction(keyPair.getPublic(),  testElections, null);
     Block block =
         new Block(
             "previousHash", "v1", 0, null, new ArrayList<Transaction>(List.of(testTransaction)));
@@ -94,5 +96,42 @@ class BlockTest {
     Assertions.assertEquals(0, testBlock.getUnsignedTransactions().size());
     Assertions.assertEquals(1, testBlock.getTransactions().size());
     Assertions.assertEquals(testTransaction.getId(), testBlock.getTransactions().get(0).getId());
+  }
+
+  @Test
+  void recordedTransactionsIncrementedAfterSigningTransaction() {
+    Elections testElections =
+            new Elections(keyPair.getPublic(), "testQuestion", new String[] {"a1"});
+    Transaction testTransaction = new Transaction(keyPair.getPublic(), testElections, null);
+    Block testBlock =
+            new Block("previousHash", "v1", 0, null, new ArrayList<>(List.of(testTransaction)));
+    String signedData =
+            new String(
+                    Base64.encodeBase64(
+                            StringUtils.signWithEcdsa(keyPair.getPrivate(), testTransaction.getSignData())));
+
+    Assertions.assertEquals(0, testBlock.getTransactions().size());
+    Assertions.assertDoesNotThrow(
+            () -> testBlock.signTransaction(testTransaction.getId(), signedData));
+    Assertions.assertEquals(1, testBlock.getTransactions().size());
+  }
+
+  @Test
+  void unconsumedTransactionsIncrementedAfterSigningElections() {
+    Elections testElections =
+            new Elections(keyPair.getPublic(), "testQuestion", new String[] {"a1"});
+    Transaction testTransaction = new Transaction(keyPair.getPublic(), testElections, null);
+    Block testBlock =
+            new Block("previousHash", "v1", 0, null, new ArrayList<>(List.of(testTransaction)));
+    String signedData =
+            new String(
+                    Base64.encodeBase64(
+                            StringUtils.signWithEcdsa(keyPair.getPrivate(), testTransaction.getSignData())));
+
+    Assertions.assertEquals(0, testBlock.getUnconsumedOutputs().size());
+    Assertions.assertDoesNotThrow(
+            () -> testBlock.signTransaction(testTransaction.getId(), signedData));
+    Assertions.assertEquals(1, testBlock.getUnconsumedOutputs().size());
+    Assertions.assertEquals(testTransaction.getId(), testBlock.getUnconsumedOutputs().get(0).getParentTransactionId());
   }
 }

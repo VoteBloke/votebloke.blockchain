@@ -1,12 +1,12 @@
 package org.votebloke.blockchain;
 
-import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.lang.NonNull;
 
 /** This is a Block class. Represents a single block in the blockchain. */
 public class Block {
@@ -113,17 +113,22 @@ public class Block {
    * Transactions consumed by the transaction and adding the outputs of the transaction.
    *
    * @param transaction the transaction to be added
+   * @return true if the Transaction object was successfully added to the Block; false otherwise
    */
-  public void addTransaction(Transaction transaction) {
+  public boolean addTransaction(@NonNull Transaction transaction) {
     if (transaction.getSignature() == null) {
       getUnsignedTransactions().add(transaction);
-      return;
+      return true;
+    }
+
+    if (!transaction.validate()) {
+      return false;
     }
 
     if (transaction.inputs != null) {
       for (TransactionInput inputTransaction : transaction.inputs) {
         if (!unconsumedOutputs.contains(inputTransaction.transactionOut)) {
-          return;
+          return false;
         }
       }
 
@@ -132,9 +137,8 @@ public class Block {
     }
     unconsumedOutputs.addAll(transaction.outputs);
 
-    if (transaction.validate()) {
-      this.transactions.add(transaction);
-    }
+    this.transactions.add(transaction);
+    return true;
   }
 
   /**
@@ -365,9 +369,10 @@ public class Block {
             .filter(transaction -> transaction.getId().equals(transactionId))
             .findFirst()
             .orElse(null);
-    if (unsignedTransaction != null && unsignedTransaction.setSignature(signature)) {
+    if (unsignedTransaction != null
+        && unsignedTransaction.setSignature(signature)
+        && this.addTransaction(unsignedTransaction)) {
       unsignedTransactions.remove(unsignedTransaction);
-      transactions.add(unsignedTransaction);
     }
   }
 
