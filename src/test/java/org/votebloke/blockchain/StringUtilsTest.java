@@ -1,14 +1,12 @@
 package org.votebloke.blockchain;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.internal.util.StringUtil;
-
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class StringUtilsTest {
   @Test
