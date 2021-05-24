@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A representation of a single transaction in the blockchain - starting elections, casting a vote,
@@ -47,6 +48,7 @@ public class Transaction {
     this.data = data;
     this.inputs = inputs;
     timeStamp = new Date(System.currentTimeMillis());
+    calculateHash();
   }
 
   /**
@@ -84,7 +86,9 @@ public class Transaction {
   private void calculateHash() {
     id =
         StringUtils.hashString(
-            StringUtils.keyToString(signee) + data.toString() + timeStamp.toString());
+            StringUtils.keyToString(signee)
+                + Optional.ofNullable(data).map(Object::toString).orElse("")
+                + timeStamp.toString());
   }
 
   /**
