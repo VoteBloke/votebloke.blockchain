@@ -92,5 +92,6 @@ class BlockTest {
         () -> testBlock.signTransaction(testTransaction.getId(), signedData));
 
     Assertions.assertEquals(0, testBlock.getUnsignedTransactions().size());
+    Assertions.assertEquals(1, testBlock.getTransactions().size());
   }
 }

@@ -2,6 +2,8 @@ package org.votebloke.blockchain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.util.StringUtil;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -31,5 +33,14 @@ class StringUtilsTest {
     String encodedKey = StringUtils.keyToString(publicKey);
     PublicKey decodedKey = StringUtils.stringToPublicKey(encodedKey);
     Assertions.assertEquals(publicKey, decodedKey);
+  }
+
+  @Test
+  void dataSignedWithEcdsaIsVerified()
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+    KeyPair keyPair = Account.generateKeys();
+    String dummyData = "data";
+    byte[] encryptedData = StringUtils.signWithEcdsa(keyPair.getPrivate(), dummyData);
+    Assertions.assertTrue(StringUtils.verifyEcdsa(keyPair.getPublic(), dummyData, encryptedData));
   }
 }

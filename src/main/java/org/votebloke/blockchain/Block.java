@@ -326,6 +326,15 @@ public class Block {
   }
 
   /**
+   * Returns the list of signed and recorded Transaction objects.
+   *
+   * @return the list of Transaction objects recorded in this Transaction
+   */
+  public ArrayList<Transaction> getTransactions() {
+    return this.transactions;
+  }
+
+  /**
    * Returns the hash of the previous Block in the blockchain.
    *
    * @return the hash of the previous Block object in the blockchain
@@ -369,8 +378,6 @@ public class Block {
    * @param base64Signature the base64 decoded signature
    */
   public void signTransaction(String transactionId, String base64Signature) {
-    signTransaction(
-        transactionId,
-        Base64.getDecoder().decode(base64Signature.getBytes(StandardCharsets.UTF_8)));
+    signTransaction(transactionId, Base64.getDecoder().decode(base64Signature));
   }
 }
