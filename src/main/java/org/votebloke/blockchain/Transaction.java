@@ -27,7 +27,6 @@ public class Transaction {
    */
   private String id;
 
-  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
   private byte[] signature;
 
   /** The time stamp of creation of this Transaction. */
@@ -97,8 +96,18 @@ public class Transaction {
    * @param privateKey the private ECDSA key used to encrypt the data
    */
   public void sign(PrivateKey privateKey) {
-    String data = StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
+    String data = getSignData();
     signature = StringUtils.signWithEcdsa(privateKey, data);
+  }
+
+  /**
+   * Returns the string, which is encrypted with a private key to create a signature for this
+   * Transaction.
+   *
+   * @return the character string characterizing this Transaction
+   */
+  public String getSignData() {
+    return StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString();
   }
 
   /**
@@ -109,10 +118,7 @@ public class Transaction {
    * @return true if the signature matches the signee; false otherwise
    */
   public boolean verifySignature() {
-    return StringUtils.verifyEcdsa(
-        signee,
-        StringUtils.keyToString(signee) + timeStamp.toString() + this.data.toString(),
-        signature);
+    return StringUtils.verifyEcdsa(signee, getSignData(), getSignature());
   }
 
   /**
@@ -168,7 +174,8 @@ public class Transaction {
   /**
    * Returns the entry type of the Entry object in this Transaction.
    *
-   * @return the type of the Entry object in this Transaction */
+   * @return the type of the Entry object in this Transaction
+   */
   public String getEntryType() {
     if (this.data != null) {
       return data.getEntryType();
@@ -179,5 +186,33 @@ public class Transaction {
 
   public String getSigner() {
     return StringUtils.keyToString(this.signee);
+  }
+
+  /** This Transaction encrypted with the private key of the agent signing this Transaction. */
+  public byte[] getSignature() {
+    return signature;
+  }
+
+  /**
+   * Sets the signature of this Transaction.
+   *
+   * @implNote this method has a strong exception safety guarantee. This Transaction will not change
+   *     state if the method throws.
+   * @param signature the signature to set
+   * @return true if the signature is verified; false otherwise
+   */
+  public boolean setSignature(byte[] signature) {
+    this.signature = signature;
+    try {
+      if (verifySignature()) {
+        return true;
+      } else {
+        this.signature = null;
+        return false;
+      }
+    } catch (Exception e) {
+      this.signature = null;
+      return false;
+    }
   }
 }

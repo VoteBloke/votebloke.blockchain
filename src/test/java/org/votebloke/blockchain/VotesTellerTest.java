@@ -60,7 +60,7 @@ class VotesTellerTest {
 
   @Test
   void tallyVotesVoteCountsHaveExpectedCounts() {
-    Assertions.assertArrayEquals(new String[]{"0", "1"}, tallyResultOneVote.get("voteCounts"));
+    Assertions.assertArrayEquals(new String[] {"0", "1"}, tallyResultOneVote.get("voteCounts"));
   }
 
   @Test
@@ -69,6 +69,6 @@ class VotesTellerTest {
     votesArray.add(badVote);
 
     VotesTeller poorVotesTeller = new VotesTeller(elections, votesArray);
-    Assertions.assertThrows(NoSuchElementException.class, () -> poorVotesTeller.tallyVotes());
+    Assertions.assertThrows(NoSuchElementException.class, poorVotesTeller::tallyVotes);
   }
 }
