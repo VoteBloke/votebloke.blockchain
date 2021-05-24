@@ -1,10 +1,9 @@
 package org.votebloke.blockchain;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class TransactionInputTest {
   TransactionInput transactionInput;
