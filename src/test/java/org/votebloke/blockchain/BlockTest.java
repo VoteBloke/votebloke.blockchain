@@ -1,5 +1,7 @@
 package org.votebloke.blockchain;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,5 +40,22 @@ class BlockTest {
     // Mined block is valid
     block.mineHash();
     Assertions.assertTrue(block.isBlockValid());
+  }
+
+  @Test
+  void constructorDoesNotThrow() {
+    Assertions.assertDoesNotThrow(() -> new Block("previousHash", "v1", 0, null, null));
+  }
+
+  @Test
+  void getUnconsumedOutputs() {
+    Transaction testTransaction = new Transaction(null, null, null);
+    Block block =
+        new Block(
+            "previousHash", "v1", 0, null, new ArrayList<Transaction>(List.of(testTransaction)));
+
+    Assertions.assertArrayEquals(
+        (new ArrayList<Transaction>(List.of(testTransaction))).toArray(),
+        block.getUnsignedTransactions(null).toArray());
   }
 }

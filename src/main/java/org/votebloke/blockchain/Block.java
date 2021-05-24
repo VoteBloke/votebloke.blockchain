@@ -1,7 +1,9 @@
 package org.votebloke.blockchain;
 
+import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +48,9 @@ public class Block {
    */
   private ArrayList<TransactionOutput> unconsumedOutputs;
 
+  /** The list of unsigned Transactions. */
+  private ArrayList<Transaction> unsignedTransactions;
+
   /**
    * Constructor for the Block class.
    *
@@ -63,6 +68,30 @@ public class Block {
     this.blockVersion = blockVersion;
     this.miningDifficulty = miningDifficulty;
     this.unconsumedOutputs = Objects.requireNonNullElseGet(unconsumedOutputs, ArrayList::new);
+    this.unsignedTransactions = new ArrayList<>();
+    id = this.calculateId();
+  }
+
+  /**
+   * Constructor for the Block class.
+   *
+   * @param previousHash the hash of the previous Block
+   * @param blockVersion the version of this Block
+   * @param miningDifficulty the mining difficulty of this Block
+   * @param unconsumedOutputs the pool of unconsumed TransactionOutputs
+   * @param unsignedTransactions the list of unsigned Transaction objects
+   */
+  public Block(
+      String previousHash,
+      String blockVersion,
+      int miningDifficulty,
+      ArrayList<TransactionOutput> unconsumedOutputs,
+      ArrayList<Transaction> unsignedTransactions) {
+    this.previousHash = previousHash;
+    this.blockVersion = blockVersion;
+    this.miningDifficulty = miningDifficulty;
+    this.unconsumedOutputs = Objects.requireNonNullElseGet(unconsumedOutputs, ArrayList::new);
+    this.unsignedTransactions = unsignedTransactions;
     id = this.calculateId();
   }
 
@@ -86,6 +115,11 @@ public class Block {
    * @param transaction the transaction to be added
    */
   public void addTransaction(Transaction transaction) {
+    if (transaction.getSignature() == null) {
+      getUnsignedTransactions().add(transaction);
+      return;
+    }
+
     if (transaction.inputs != null) {
       for (TransactionInput inputTransaction : transaction.inputs) {
         if (!unconsumedOutputs.contains(inputTransaction.transactionOut)) {
@@ -265,6 +299,33 @@ public class Block {
   }
 
   /**
+   * Returns the list of unsigned Transaction objects in this Block.
+   *
+   * @param keyId the string representation of the public key, which authored the returned
+   *     Transactions. If null, then returns all Transactions.
+   * @return the list of unsigned Transaction objects in this Block.
+   */
+  public ArrayList<Transaction> getUnsignedTransactions(String keyId) {
+    ArrayList<Transaction> unsignedTransactions = new ArrayList<>();
+    unsignedTransactions.forEach(
+        transaction -> {
+          if (transaction.getSigner().equals(keyId) || keyId == null) {
+            unsignedTransactions.add(transaction);
+          }
+        });
+    return this.unsignedTransactions;
+  }
+
+  /**
+   * Returns the list of unsigned Transaction objects in this Block.
+   *
+   * @return the list of unsigned Transaction objects in this Block.
+   */
+  public ArrayList<Transaction> getUnsignedTransactions() {
+    return getUnsignedTransactions(null);
+  }
+
+  /**
    * Returns the hash of the previous Block in the blockchain.
    *
    * @return the hash of the previous Block object in the blockchain
@@ -281,5 +342,35 @@ public class Block {
    */
   private String getHeader() {
     return this.timeStamp + this.blockVersion + this.previousHash;
+  }
+
+  /**
+   * Signs a Transaction object with a provided signature.
+   *
+   * @param transactionId the id of the signed Transaction
+   * @param signature the signature
+   */
+  public void signTransaction(String transactionId, byte[] signature) {
+    Transaction unsignedTransaction =
+        unsignedTransactions.stream()
+            .filter(transaction -> transaction.getId().equals(transactionId))
+            .findFirst()
+            .orElse(null);
+    if (unsignedTransaction != null && unsignedTransaction.setSignature(signature)) {
+      unsignedTransactions.remove(unsignedTransaction);
+      transactions.add(unsignedTransaction);
+    }
+  }
+
+  /**
+   * Signs a Transaction object with a provided signature.
+   *
+   * @param transactionId the id of the signed Transaction
+   * @param base64Signature the base64 decoded signature
+   */
+  public void signTransaction(String transactionId, String base64Signature) {
+    signTransaction(
+        transactionId,
+        Base64.getDecoder().decode(base64Signature.getBytes(StandardCharsets.UTF_8)));
   }
 }

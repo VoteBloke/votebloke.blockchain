@@ -2,16 +2,22 @@ package org.votebloke.blockchain;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.concurrent.ThreadLocalRandom;
 
-class StringUtils {
+/** A set of utility functions for the votebloke.blockchain library. */
+public class StringUtils {
   /**
-   * Converts a string to a hex representation of its bytes. First converts the text to bytes then
-   * to hex.
+   * Converts a string to a hex representation of its hashed bytes. First converts the text to bytes
+   * then to hex.
    *
    * @param text the string to be converted.
    * @return the hex representation of byte-representation of the \code{text}
@@ -34,8 +40,30 @@ class StringUtils {
     }
   }
 
+  /**
+   * Encodes a key to base64.
+   *
+   * @param key the public key to encode
+   * @return the 64 base string encoded key
+   */
   public static String keyToString(Key key) {
     return Base64.getEncoder().encodeToString(key.getEncoded());
+  }
+
+  /**
+   * Converts a string encoded public key to a PublicKey object.
+   *
+   * @param string the provided base 64 encoded public key
+   * @return the ECDSA public key
+   * @throws NoSuchAlgorithmException if there is no provider of the ECDSA algorithm
+   * @throws InvalidKeySpecException if the encoded public key does not match the ECDSA key factory
+   */
+  public static PublicKey stringToPublicKey(String string)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
+    X509EncodedKeySpec publicKeySpec =
+        new X509EncodedKeySpec(Base64.getDecoder().decode(string.getBytes(StandardCharsets.UTF_8)));
+    KeyFactory keyFactory = KeyFactory.getInstance("EC");
+    return keyFactory.generatePublic(publicKeySpec);
   }
 
   /**
@@ -76,6 +104,33 @@ class StringUtils {
       return ecdsaVerify.verify(signature);
     } catch (Exception e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Tests whether a key pair matches.
+   *
+   * @param privateKey the private key
+   * @param publicKey the public key
+   * @return true if keys match; false otherwise
+   */
+  public static boolean keysMatch(PrivateKey privateKey, PublicKey publicKey) {
+    byte[] challenge = new byte[10000];
+    ThreadLocalRandom.current().nextBytes(challenge);
+
+    Signature signature;
+    try {
+      signature = Signature.getInstance("SHA256withECDSA");
+      signature.initSign(privateKey);
+      signature.update(challenge);
+      byte[] encryptedChallenge = signature.sign();
+
+      signature.initVerify(publicKey);
+      signature.update(challenge);
+      return signature.verify(encryptedChallenge);
+
+    } catch (Exception e) {
+      return false;
     }
   }
 }

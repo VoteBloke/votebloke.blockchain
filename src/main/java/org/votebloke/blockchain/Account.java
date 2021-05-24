@@ -10,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 /** A representation of a single agent. */
@@ -31,6 +32,24 @@ public class Account {
   }
 
   /**
+   * The constructor for the Account class.
+   *
+   * @param publicKey the public ECDSA key of this Account
+   */
+  public Account(PublicKey publicKey) {
+    this(publicKey, null);
+  }
+
+  /**
+   * A constructor for the Account class.
+   *
+   * @param publicKey the string encoded public key identifying this Account
+   */
+  public Account(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    this(StringUtils.stringToPublicKey(publicKey), null);
+  }
+
+  /**
    * Generates a private and public key pair using an elliptic curve algorithm (256 bits size).
    *
    * @return the generated KeyPair
@@ -43,24 +62,6 @@ public class Account {
     KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC");
     kpg.initialize(new ECGenParameterSpec("secp256r1"), new SecureRandom());
     return kpg.generateKeyPair();
-  }
-
-  /**
-   * Exports the private and public key of this Account to files in the provided directory.
-   *
-   * @param dir the directory that will hold the files with the private and the public key
-   * @throws IOException when writing to files failed
-   */
-  public void exportKeys(String dir) throws IOException {
-    FileOutputStream out;
-
-    out = new FileOutputStream(dir + ".key");
-    out.write(getPrivateKey().getEncoded());
-    out.close();
-
-    out = new FileOutputStream(dir + ".pub");
-    out.write(getPublicKey().getEncoded());
-    out.close();
   }
 
   /**
@@ -100,7 +101,10 @@ public class Account {
     Elections elections = new Elections(getPublicKey(), question, answers);
     Transaction electionTransaction = new Transaction(getPublicKey(), elections, null);
     electionTransaction.processTransaction();
-    electionTransaction.sign(getPrivateKey());
+
+    if (getPrivateKey() != null) {
+      electionTransaction.sign(getPrivateKey());
+    }
 
     return electionTransaction;
   }
@@ -119,7 +123,10 @@ public class Account {
     Vote vote = new Vote(getPublicKey(), elections, answer);
     Transaction voteTransaction = new Transaction(getPublicKey(), vote, inputTransactions);
     voteTransaction.processTransaction();
-    voteTransaction.sign(getPrivateKey());
+
+    if (getPrivateKey() != null) {
+      voteTransaction.sign(getPrivateKey());
+    }
 
     return voteTransaction;
   }
@@ -139,7 +146,10 @@ public class Account {
     Tally tally = new Tally(getPublicKey(), null, null);
     Transaction tallyTransaction = new Transaction(getPublicKey(), tally, inputTransactions);
     tallyTransaction.processTransaction();
-    tallyTransaction.sign(getPrivateKey());
+
+    if (getPrivateKey() != null) {
+      tallyTransaction.sign(getPrivateKey());
+    }
 
     return tallyTransaction;
   }
