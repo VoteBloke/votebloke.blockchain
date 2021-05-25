@@ -43,7 +43,11 @@ public class Account {
   /**
    * A constructor for the Account class.
    *
-   * @param publicKey the string encoded public key identifying this Account
+   * <p>Accepts a UTF-8 decoded public ECDSA key, created with SECP256p1 algorithm, encoded in X509
+   * standard, DER formatted.
+   *
+   * @param publicKey the public key created with SECP256p1 algorithm, encoded in X509 standard and
+   *     in DER format
    */
   public Account(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
     this(StringUtils.stringToPublicKey(publicKey), null);
