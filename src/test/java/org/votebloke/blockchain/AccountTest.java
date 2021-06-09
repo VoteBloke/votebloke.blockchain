@@ -2,6 +2,8 @@ package org.votebloke.blockchain;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -54,5 +56,13 @@ public class AccountTest {
             (Elections) electionsTransaction.data,
             new ArrayList<TransactionInput>(List.of(new TransactionInput(electionsTransaction))));
     Assertions.assertTrue(voteTransaction.validate());
+  }
+
+  @Test
+  void publicKeyOfAccountConstructedWithStringMatchesOriginalKey()
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, InvalidKeySpecException {
+    PublicKey publicKey = Account.generateKeys().getPublic();
+    Account account = new Account(StringUtils.keyToString(publicKey));
+    Assertions.assertEquals(publicKey, account.getPublicKey());
   }
 }

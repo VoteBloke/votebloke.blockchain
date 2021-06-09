@@ -100,7 +100,6 @@ public class Account {
   public Transaction createElections(String question, String[] answers) {
     Elections elections = new Elections(getPublicKey(), question, answers);
     Transaction electionTransaction = new Transaction(getPublicKey(), elections, null);
-    electionTransaction.processTransaction();
 
     if (getPrivateKey() != null) {
       electionTransaction.sign(getPrivateKey());
@@ -122,7 +121,6 @@ public class Account {
       String answer, Elections elections, ArrayList<TransactionInput> inputTransactions) {
     Vote vote = new Vote(getPublicKey(), elections, answer);
     Transaction voteTransaction = new Transaction(getPublicKey(), vote, inputTransactions);
-    voteTransaction.processTransaction();
 
     if (getPrivateKey() != null) {
       voteTransaction.sign(getPrivateKey());
@@ -145,7 +143,6 @@ public class Account {
   public Transaction tally(ArrayList<TransactionInput> inputTransactions) {
     Tally tally = new Tally(getPublicKey(), null, null);
     Transaction tallyTransaction = new Transaction(getPublicKey(), tally, inputTransactions);
-    tallyTransaction.processTransaction();
 
     if (getPrivateKey() != null) {
       tallyTransaction.sign(getPrivateKey());

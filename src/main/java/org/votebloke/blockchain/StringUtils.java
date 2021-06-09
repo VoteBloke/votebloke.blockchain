@@ -47,7 +47,11 @@ public class StringUtils {
    * @return the 64 base string encoded key
    */
   public static String keyToString(Key key) {
-    return Base64.getEncoder().encodeToString(key.getEncoded());
+    if (key != null) {
+      return Base64.getEncoder().encodeToString(key.getEncoded());
+    } else {
+      return "";
+    }
   }
 
   /**

@@ -1,15 +1,31 @@
 package org.votebloke.blockchain;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TransactionTest {
 
-  @Test
-  void processTransaction() {}
+  KeyPair keyPair;
+  Elections elections;
+
+  @BeforeEach
+  void setUp() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+    keyPair = Account.generateKeys();
+    elections = new Elections(keyPair.getPublic(), "test", new String[] {"ans1"});
+  }
 
   @Test
-  void generateSignature() {}
+  void transactionConstructorsDoNotThrow() {
+    Assertions.assertDoesNotThrow(() -> new Transaction(keyPair.getPublic(), elections, null));
+  }
 
   @Test
-  void verifySignature() {}
+  void newlyConstructedTransactionHasId() {
+    Transaction transaction = new Transaction(keyPair.getPublic(), elections, null);
+    Assertions.assertNotNull(transaction.getId());
+  }
 }

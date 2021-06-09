@@ -32,4 +32,13 @@ class StringUtilsTest {
     PublicKey decodedKey = StringUtils.stringToPublicKey(encodedKey);
     Assertions.assertEquals(publicKey, decodedKey);
   }
+
+  @Test
+  void dataSignedWithEcdsaIsVerified()
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+    KeyPair keyPair = Account.generateKeys();
+    String dummyData = "data";
+    byte[] encryptedData = StringUtils.signWithEcdsa(keyPair.getPrivate(), dummyData);
+    Assertions.assertTrue(StringUtils.verifyEcdsa(keyPair.getPublic(), dummyData, encryptedData));
+  }
 }

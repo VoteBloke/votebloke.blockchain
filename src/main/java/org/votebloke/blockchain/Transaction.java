@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.lang.NonNull;
 
 /**
  * A representation of a single transaction in the blockchain - starting elections, casting a vote,
@@ -42,11 +43,13 @@ public class Transaction {
    * @param data the data inside this Transaction
    * @param inputs the list of Transaction consisting the input for this Transaction
    */
-  public Transaction(PublicKey signee, Entry data, List<TransactionInput> inputs) {
+  public Transaction(
+      @NonNull PublicKey signee, @NonNull Entry data, List<TransactionInput> inputs) {
     this.signee = signee;
     this.data = data;
     this.inputs = inputs;
     timeStamp = new Date(System.currentTimeMillis());
+    processTransaction();
   }
 
   /**
@@ -57,11 +60,10 @@ public class Transaction {
    * @return the list of outputs corresponding to: this Transaction and unconsumed Transaction from
    *     inputs
    */
-  public List<TransactionOutput> processTransaction() {
+  private List<TransactionOutput> processTransaction() {
     List<TransactionOutput> outputs;
     try {
       outputs = data.processEntry(inputs);
-      calculateHash();
     } catch (Exception e) {
       ArrayList<TransactionOutput> unchangedOutputs = new ArrayList<>();
       for (TransactionInput inputTransaction : inputs) {
@@ -69,6 +71,7 @@ public class Transaction {
       }
       return unchangedOutputs;
     }
+    calculateHash();
     outputs.add(new TransactionOutput(signee, data, getId()));
 
     this.outputs = outputs;
