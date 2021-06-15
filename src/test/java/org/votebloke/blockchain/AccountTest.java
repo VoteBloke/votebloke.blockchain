@@ -33,6 +33,16 @@ public class AccountTest {
   }
 
   @Test
+  void constructorAcceptsBase64EncodedPublicKeyInDerFormat() {
+    Assertions.assertDoesNotThrow(
+        () ->
+            new Account(
+                "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE34xUy"
+                    + "5Kwf6iywVGAjFipmGA7cyboeclnD7VOxiVqC5fTxfzDCt" +
+                        "+3oDOPx0EVKJJfRCJ4v8CIPNLqxA+bLSdhfA=="));
+  }
+
+  @Test
   void createElectionsTestReturnsValidTransaction() {
     Transaction electionsTransaction =
         ac.createElections("test question", new String[] {"answer1", "answer2"});
