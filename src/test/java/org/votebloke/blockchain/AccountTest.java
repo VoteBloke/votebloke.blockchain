@@ -38,7 +38,8 @@ public class AccountTest {
         () ->
             new Account(
                 "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE34xUy"
-                    + "5Kwf6iywVGAjFipmGA7cyboeclnD7VOxiVqC5fTxfzDCt+3oDOPx0EVKJJfRCJ4v8CIPNLqxA+bLSdhfA=="));
+                    + "5Kwf6iywVGAjFipmGA7cyboeclnD7VOxiVqC5fTxfzDCt" +
+                        "+3oDOPx0EVKJJfRCJ4v8CIPNLqxA+bLSdhfA=="));
   }
 
   @Test
