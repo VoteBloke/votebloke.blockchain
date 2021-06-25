@@ -1,7 +1,9 @@
 plugins {
     id 'org.springframework.boot' version '2.4.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'}
+    id 'java'
+    id 'maven-publish'
+}
 
 group = 'org.votebloke'
 version = '0.0.1-SNAPSHOT'
@@ -29,4 +31,17 @@ jar {
     enabled = true
     archiveFileName = 'org.votebloke.blockchain.jar'
     destinationDirectory.set(file("../libs"))
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GithubPackages"
+            url = "https://maven.pkg.github.com/VoteBloke/votebloke.blockchain"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
