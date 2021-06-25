@@ -6,6 +6,7 @@ plugins {
 }
 
 group = 'org.votebloke'
+name = 'blockchain'
 version = '1.0.0'
 sourceCompatibility = '16'
 
@@ -27,18 +28,13 @@ bootJar {
     enabled = false
 }
 
-jar {
-    enabled = true
-    archiveFileName = 'org.votebloke.blockchain.jar'
-    destinationDirectory.set(file("../libs"))
-}
-
-MavenPublication {
-    groupId = "org.votebloke"
-    artifactId = "blockchain"
-}
-
 publishing {
+    publications {
+        githubPublication(MavenPublication) {
+            from components.java
+        }
+    }
+
     repositories {
         maven {
             name = "GithubPackages"
