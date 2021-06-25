@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.votebloke'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '16'
 
 repositories {
@@ -33,11 +33,16 @@ jar {
     destinationDirectory.set(file("../libs"))
 }
 
+MavenPublication {
+    groupId = "org.votebloke"
+    artifactId = "blockchain"
+}
+
 publishing {
     repositories {
         maven {
             name = "GithubPackages"
-            url = "https://maven.pkg.github.com/VoteBloke/votebloke.blockchain"
+            url = "https://maven.pkg.github.com/votebloke/votebloke.blockchain"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
