@@ -6,7 +6,6 @@ plugins {
 }
 
 group = 'org.votebloke'
-name = 'blockchain'
 version = '1.0.0'
 sourceCompatibility = '16'
 
