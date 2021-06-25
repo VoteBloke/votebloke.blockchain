@@ -1,4 +1,4 @@
-name: Style checks
+name: Check Google code styling
 
 on:
   push:
