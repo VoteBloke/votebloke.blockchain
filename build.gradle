@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.votebloke'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '16'
 
 repositories {
@@ -23,21 +23,21 @@ test {
     useJUnitPlatform()
 }
 
-bootJar {
-    enabled = false
-}
-
 jar {
     enabled = true
-    archiveFileName = 'org.votebloke.blockchain.jar'
-    destinationDirectory.set(file("../libs"))
 }
 
 publishing {
+    publications {
+        githubPublication(MavenPublication) {
+            from components.java
+        }
+    }
+
     repositories {
         maven {
             name = "GithubPackages"
-            url = "https://maven.pkg.github.com/VoteBloke/votebloke.blockchain"
+            url = "https://maven.pkg.github.com/votebloke/votebloke.blockchain"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
